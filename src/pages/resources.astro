@@ -8,48 +8,40 @@ const sections = [
   { key: 'youtube', title: 'قنوات يوتيوب للدراسة', icon: 'youtube', sub: 'أفضل القنوات لشرح الفارماكولوجي والفسيولوجي' },
   { key: 'references', title: 'مراجع ومواقع صيدلانية', icon: 'book', sub: 'مراجع موثوقة للأدوية والحمل والرضاعة' },
   { key: 'apps', title: 'تطبيقات الصيدلي', icon: 'doc', sub: 'تطبيقات يومية للجرعات والتداخلات' },
-];
+].map((s) => ({ ...s, items: all.filter((r) => r.data.section === s.key) })).filter((s) => s.items.length);
 ---
 <Base title="المراجع الصيدلانية" description="دورات مجانية، قنوات يوتيوب للفارماكولوجي، مراجع وتطبيقات للصيادلة وطلبة الصيدلة.">
   <div class="page-head">
     <div class="wrap">
       <h1>المراجع الصيدلانية</h1>
       <p>دورات مجانية، قنوات يوتيوب للدراسة، مراجع موثوقة وتطبيقات يحتاجها كل صيدلي وطالب صيدلة.</p>
-      <nav class="filters" style="margin-top:18px" aria-label="أقسام الصفحة">
-        {sections.map((s) => <a class="chip" style="padding:6px 14px;font-size:15px" href={`#${s.key}`}>{s.title}</a>)}
+      <nav class="jump" aria-label="أقسام الصفحة">
+        {sections.map((s) => <a href={`#${s.key}`}><Icon name={s.icon} size={18} />{s.title}</a>)}
       </nav>
     </div>
   </div>
-  <section class="section" style="padding-top:28px">
+  <section class="section" style="padding-top:24px">
     <div class="wrap">
-      <a href="/posts/best-pharmacy-apps" class="policy-banner" style="text-decoration:none;margin-bottom:40px">
-        <div class="badge"><Icon name="book" size={30} /></div>
-        <div>
-          <h2>مقال: أفضل تطبيقات الصيدلي</h2>
-          <p style="margin:0">Lexidrug و Medscape و Epocrates و BNF، وتطبيقات الأدوية أثناء الحمل والرضاعة، مع مقارنة المجاني والمدفوع.</p>
-        </div>
+      <a href="/posts/best-pharmacy-apps" class="feature-link">
+        <span class="badge"><Icon name="book" size={26} /></span>
+        <span><strong>مقال: أفضل تطبيقات الصيدلي</strong><span>Lexidrug و Medscape و Epocrates و BNF، وتطبيقات الأدوية أثناء الحمل والرضاعة، مع مقارنة المجاني والمدفوع.</span></span>
+        <Icon name="arrow" size={22} />
       </a>
-      {sections.map((s) => {
-        const items = all.filter((r) => r.data.section === s.key);
-        return items.length > 0 && (
-          <div class="policy-group" id={s.key} style="scroll-margin-top:90px">
-            <h2><Icon name={s.icon} size={24} /> {s.title} <span class="count">{items.length}</span></h2>
-            <p style="color:var(--muted);margin:-6px 0 16px">{s.sub}</p>
-            <div class="res-grid">
-              {items.map((r) => (
-                <a class="res" href={r.data.url} target="_blank" rel="noopener">
-                  <div class="res-top">
-                    <strong dir="auto">{r.data.name}</strong>
-                    <span class:list={['tag', { paid: !r.data.free }]}>{r.data.free ? 'مجاني' : 'مدفوع جزئياً'}</span>
-                  </div>
-                  {r.data.desc && <p>{r.data.desc}</p>}
-                  <span class="go">زيارة <Icon name="external" size={15} /></span>
-                </a>
-              ))}
-            </div>
+      {sections.map((s) => (
+        <section class="res-section" id={s.key} aria-labelledby={`h-${s.key}`}>
+          <h2 class="group-title" id={`h-${s.key}`} style="border:0;padding:0">{s.title} <span class="count">{s.items.length}</span></h2>
+          <p>{s.sub}</p>
+          <div class="res-grid">
+            {s.items.map((r) => (
+              <a class="res" href={r.data.url} target="_blank" rel="noopener">
+                <strong dir="auto">{r.data.name}</strong>
+                <span class:list={['free', { paid: !r.data.free }]}>{r.data.free ? 'مجاني' : 'مدفوع جزئياً'}</span>
+                {r.data.desc && <p>{r.data.desc}</p>}
+              </a>
+            ))}
           </div>
-        );
-      })}
+        </section>
+      ))}
     </div>
   </section>
 </Base>

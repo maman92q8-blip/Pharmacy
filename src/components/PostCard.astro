@@ -1,24 +1,23 @@
 ---
-import Icon from './Icon.astro';
+// One post in a list. On phones it becomes a compact row (title + small square image).
+import Thumb from './Thumb.astro';
+import CatLabel from './CatLabel.astro';
 import { categories } from '../data/site';
-import { formatDate, readingTime, type Post } from '../data/posts';
-interface Props { post: Post }
-const { post } = Astro.props;
+import { formatDate, readingLabel, mainCategory, type Post } from '../data/posts';
+interface Props { post: Post; headingLevel?: 'h2' | 'h3'; showCategory?: boolean }
+const { post, headingLevel = 'h3', showCategory = true } = Astro.props;
 const { title, image, excerpt, date } = post.data;
-const cat = post.data.categories.map((c) => categories[c]).find(Boolean);
+const cat = mainCategory(post, categories);
 const url = `/posts/${post.id}`;
+const H = headingLevel;
 ---
-<article class="card" data-title={title} data-text={excerpt ?? ''} data-cats={post.data.categories.join(' ') + (post.data.experience ? ' experience' : '')}>
-  <a href={url} class:list={['cover', { noimg: !image }]} tabindex="-1" aria-hidden="true">
-    {image ? <img src={image} alt="" loading="lazy" /> : <span>℞</span>}
-  </a>
-  <div class="body">
-    {cat && <span><span class="chip">{cat.name}</span></span>}
-    <h3><a href={url}>{title}</a></h3>
-    {excerpt && <p>{excerpt}</p>}
-    <div class="meta" style="margin-top:auto">
-      <span><Icon name="calendar" size={15} />{formatDate(date)}</span>
-      <span><Icon name="clock" size={15} />{readingTime(post.body)} دقائق قراءة</span>
-    </div>
+<article class="post" data-title={title} data-text={excerpt ?? ''} data-cats={post.data.categories.join(' ') + (post.data.experience ? ' experience' : '')}>
+  <a href={url} tabindex="-1" aria-hidden="true"><Thumb src={image} tone={cat} /></a>
+  <H class="story-title"><a href={url}>{title}</a></H>
+  {excerpt && <p class="excerpt">{excerpt}</p>}
+  <div class="meta">
+    {showCategory && cat && <CatLabel slug={cat} />}
+    <span><time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time></span>
+    <span>{readingLabel(post.body)}</span>
   </div>
 </article>

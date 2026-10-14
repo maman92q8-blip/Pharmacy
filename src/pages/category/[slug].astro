@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PostList from '../../components/PostList.astro';
+import Icon from '../../components/Icon.astro';
 import { categories } from '../../data/site';
 import { getPosts } from '../../data/posts';
 export async function getStaticPaths() {
@@ -10,8 +11,15 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const { posts } = Astro.props;
 const cat = categories[slug!];
+const isRegion = slug !== 'pharmacy-articles';
 ---
 <Base title={cat.name}>
-  <div class="page-head"><div class="wrap"><h1>{cat.name}</h1><p>{posts.length} {posts.length === 1 ? 'مقال' : 'مقالات'}</p></div></div>
-  <section class="section" style="padding-top:28px"><div class="wrap"><PostList posts={posts} filters={false} /></div></section>
+  <div class={`page-head banded tone--${slug}`}>
+    <div class="wrap">
+      <a class="crumb" href={isRegion ? '/experiences' : '/blog'}><Icon name="arrow" size={16} flip /> {isRegion ? 'تجارب واقعية' : 'المدونة'}</a>
+      <h1>{cat.name}</h1>
+      <p><span class="ltr">{cat.nameEn}</span></p>
+    </div>
+  </div>
+  <section class="section" style="padding-top:36px"><div class="wrap"><PostList posts={posts} filters={false} showCategory={false} /></div></section>
 </Base>

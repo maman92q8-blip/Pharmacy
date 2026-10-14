@@ -35,7 +35,7 @@ Set `experience: true` to also list the article under **تجارب واقعية*
 
 ## 🎨 Change colours, name or links
 
-- Colours: top of **`src/styles/global.css`** (`--teal`, `--navy`, `--amber`…).
+- Colours: top of **`src/styles/global.css`** (`--navy`, `--pink`, `--sunny`…). The design rules are written down in **`DESIGN.md`**.
 - Site name, social links, booking link, category names: **`src/data/site.ts`**.
 
 ## Writing tips (Markdown)

@@ -1,20 +1,25 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
+import Hawan from '../components/Hawan.astro';
 import { site } from '../data/site';
 ---
 <Base title="الاستشارات و الدورات">
-  <div class="page-head"><div class="wrap"><h1>الاستشارات و الدورات</h1><p>Consultations</p></div></div>
-  <section class="section" style="padding-top:32px">
-    <div class="wrap" style="max-width:760px">
-      <div class="policy-banner">
-        <div class="badge"><Icon name="calendar" size={30} /></div>
+  <div class="page-head"><div class="wrap"><h1>الاستشارات و الدورات</h1><p>استشارة خاصة عن دراسة الصيدلة، الابتعاث، أو مسارك المهني.</p></div></div>
+  <section class="section" style="padding-top:8px">
+    <div class="wrap" style="max-width:960px">
+      <div class="booking">
         <div>
           <h2>احجز استشارتك</h2>
           <p>لحجز الاستشارات عن دراسة الصيدلة، الابتعاث، أو مسارك المهني، اختر الموعد المناسب لك.</p>
-          <a href={site.booking} class="btn btn-primary">احجز الآن <Icon name="arrow" size={18} /></a>
+          <ul class="topics" aria-label="مواضيع الاستشارة">
+            <li>دراسة الصيدلة</li><li>الابتعاث</li><li>المسار المهني</li>
+          </ul>
+          <a href={site.booking} class="btn btn-primary"><Icon name="calendar" /> اختر موعداً</a>
         </div>
+        <div class="art"><Hawan size={160} animate={false} decorative /></div>
       </div>
+      <p style="margin-top:28px;color:var(--muted)">تفضّل الفيديو؟ تابع <a href={site.social.youtube}>قناة اليوتيوب</a> أو <a href={site.social.instagram}>إنستغرام</a>، أو <a href="/about">تعرّف على موضي</a>.</p>
     </div>
   </section>
 </Base>

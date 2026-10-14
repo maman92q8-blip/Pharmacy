@@ -1,35 +1,42 @@
 ---
-// Searchable, filterable list of posts
+// Searchable, filterable list of posts. Reads ?q= so searches from the home page and menu land here.
 import PostCard from './PostCard.astro';
 import Icon from './Icon.astro';
+import Hawan from './Hawan.astro';
 import { categories } from '../data/site';
-import type { Post } from '../data/posts';
-interface Props { posts: Post[]; filters?: boolean }
-const { posts, filters = true } = Astro.props;
+import { articlesLabel, type Post } from '../data/posts';
+interface Props { posts: Post[]; filters?: boolean; experienceFilter?: boolean; showCategory?: boolean; headingLevel?: 'h2' | 'h3' }
+const { posts, filters = true, experienceFilter = true, showCategory = true, headingLevel = 'h2' } = Astro.props;
 const used = Object.keys(categories).filter((c) => posts.some((p) => p.data.categories.includes(c)));
 ---
 <div class="toolbar" id="search">
-  <label class="search">
-    <span class="sr" hidden>ابحث في المقالات</span>
+  <form class="searchbox" role="search" action="" onsubmit="return false">
+    <label for="post-search" class="sr">ابحث في المقالات</label>
     <Icon name="search" />
-    <input type="search" placeholder="ابحث في المقالات… مثلاً: فارم دي، بريطانيا، ماجستير" data-search />
-  </label>
+    <input id="post-search" type="search" name="q" placeholder="ابحث… مثلاً: فارم دي، بريطانيا، ماجستير" autocomplete="off" enterkeyhint="search" data-search />
+  </form>
   {filters && (
-    <div class="filters" role="group" aria-label="التصنيفات">
+    <div class="filters" role="group" aria-label="تصفية حسب التصنيف">
       <button type="button" aria-pressed="true" data-filter="">الكل</button>
-      <button type="button" aria-pressed="false" data-filter="experience">تجارب واقعية</button>
+      {experienceFilter && <button type="button" aria-pressed="false" data-filter="experience">تجارب واقعية</button>}
       {used.map((c) => <button type="button" aria-pressed="false" data-filter={c}>{categories[c].name}</button>)}
     </div>
   )}
 </div>
-<div class="grid" data-list>{posts.map((p) => <PostCard post={p} />)}</div>
-<p class="empty" data-empty hidden>لا توجد نتائج. جرّب كلمة أخرى.</p>
+<p class="result-count" data-count aria-live="polite">{articlesLabel(posts.length)}</p>
+<div class="post-grid" data-list>{posts.map((p) => <PostCard post={p} headingLevel={headingLevel} showCategory={showCategory} />)}</div>
+<div class="empty" data-empty hidden>
+  <span class="empty-art"><Hawan size={96} animate={false} decorative /></span>
+  <strong>ما لقينا مقالات بهذه الكلمات.</strong>
+  جرّب كلمة أخرى، أو اختر «الكل» من التصنيفات.
+</div>
 
 <script>
   const input = document.querySelector<HTMLInputElement>('[data-search]')!;
-  const cards = [...document.querySelectorAll<HTMLElement>('[data-list] .card')];
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-list] .post')];
   const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
   const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+  const count = document.querySelector<HTMLElement>('[data-count]')!;
   let cat = '';
   const norm = (s: string) => s.toLowerCase().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي');
   function apply() {
@@ -41,6 +48,7 @@ const used = Object.keys(categories).filter((c) => posts.some((p) => p.data.cate
       c.hidden = !ok; if (ok) shown++;
     }
     empty.hidden = shown > 0;
+    count.textContent = shown === 1 ? 'مقال واحد' : shown === 2 ? 'مقالان' : shown >= 3 && shown <= 10 ? `${shown} مقالات` : `${shown} مقالاً`;
   }
   input.addEventListener('input', apply);
   buttons.forEach((b) => b.addEventListener('click', () => {
@@ -48,5 +56,7 @@ const used = Object.keys(categories).filter((c) => posts.some((p) => p.data.cate
     buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
     apply();
   }));
-  if (location.hash === '#search') input.focus();
+  const q = new URLSearchParams(location.search).get('q');
+  if (q) { input.value = q; apply(); }
+  if (location.hash === '#search' || q) input.focus({ preventScroll: !!q });
 </script>

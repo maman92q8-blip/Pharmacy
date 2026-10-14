@@ -1,77 +1,183 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import PostCard from '../components/PostCard.astro';
 import Icon from '../components/Icon.astro';
-import { site, categories } from '../data/site';
-import { getPosts } from '../data/posts';
-const posts = (await getPosts()).slice(0, 6);
-const regions = ['uk-ireland', 'usa-canada', 'arab-countries'];
+import Hawan from '../components/Hawan.astro';
+import PillBuddy from '../components/PillBuddy.astro';
+import Thumb from '../components/Thumb.astro';
+import CatLabel from '../components/CatLabel.astro';
+import { site, categories, policyCategories } from '../data/site';
+import { getPosts, formatDate, readingLabel, mainCategory, articlesLabel } from '../data/posts';
+
+const posts = await getPosts();
+const [lead, ...rest] = posts;
+const rail = rest.slice(0, 4);
+const leadCat = mainCategory(lead, categories);
+
+const regions = ['uk-ireland', 'usa-canada', 'arab-countries'].map((slug) => {
+  const inCat = posts.filter((p) => p.data.categories.includes(slug));
+  return { slug, ...categories[slug], count: inCat.length, latest: inCat.slice(0, 3) };
+});
+
+const when = (p: { data: { date?: Date; year?: number } }) => p.data.date?.valueOf() ?? (p.data.year ? Date.UTC(p.data.year, 0, 1) : 0);
+const policies = (await getCollection('policies'))
+  .filter((p) => p.data.category !== 'official')
+  .sort((a, b) => when(b) - when(a))
+  .slice(0, 4);
+const fmtPolicyDate = (d?: Date, y?: number) => d ? formatDate(d) : y ? String(y) : '';
+
+const library = (await getCollection('library')).sort((a, b) => (b.data.year ?? 0) - (a.data.year ?? 0));
+const studies = library.filter((s) => s.data.region === 'kuwait').slice(0, 3);
+const resources = await getCollection('resources');
+const resSections = [
+  { key: 'courses', title: 'دورات مجانية', icon: 'calendar' },
+  { key: 'youtube', title: 'قنوات يوتيوب للدراسة', icon: 'youtube' },
+  { key: 'references', title: 'مراجع ومواقع صيدلانية', icon: 'book' },
+  { key: 'apps', title: 'تطبيقات الصيدلي', icon: 'doc' },
+].map((s) => ({ ...s, count: resources.filter((r) => r.data.section === s.key).length })).filter((s) => s.count);
 ---
 <Base>
-  <section class="hero">
-    <div class="wrap">
+  <section class="hero on-dark">
+    <div class="wrap hero-grid">
       <div>
-        <h1>كل ما يتعلق بـ<mark>الصيدلة</mark></h1>
-        <p class="en">{site.taglineEn}</p>
-        <p class="lead">تجارب حقيقية لصيادلة وطلبة صيدلة في الكويت وحول العالم، ومراجع وأبحاث خليجية، لتساعدك تختار تخصصك وطريقك المهني.</p>
-        <div class="btns">
-          <a href="/blog" class="btn btn-primary"><Icon name="book" /> اقرأ المقالات</a>
-          <a href="/library" class="btn btn-ghost"><Icon name="library" /> مكتبة الصيادلة</a>
+        <h1 class="reveal">كل ما يتعلق بالصيدلة</h1>
+        <p class="lead reveal">تجارب حقيقية لصيادلة وطلبة صيدلة في الكويت وحول العالم، ومراجع وأبحاث خليجية، لتساعدك تختار تخصصك وطريقك المهني.</p>
+        <form class="searchbox reveal" role="search" action="/blog" method="get">
+          <label for="hero-search" class="sr">ابحث في المقالات</label>
+          <Icon name="search" />
+          <input id="hero-search" type="search" name="q" placeholder="مثلاً: فارم دي، ماجستير، إيرلندا" autocomplete="off" enterkeyhint="search" required />
+          <button type="submit">ابحث</button>
+        </form>
+        <nav class="regions-quick reveal" aria-labelledby="where">
+          <p id="where">وين تبي تدرس؟</p>
+          <ul>
+            {regions.map((r) => <li><a class={`tone--${r.slug}`} href={`/category/${r.slug}`}>{r.name.replace('تجارب من ', '')}</a></li>)}
+          </ul>
+        </nav>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <span class="blob"></span>
+        <Hawan class="hawan" size={300} decorative />
+        <PillBuddy />
+        <span class="note">أهلاً! أنا هاون</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="latest">
+    <div class="wrap">
+      <div class="section-head">
+        <div><h2 id="latest">أحدث المقالات</h2></div>
+        <a href="/blog" class="link-more">كل المقالات ({posts.length}) <Icon name="arrow" size={18} /></a>
+      </div>
+      <div class="front">
+        <article class="lead-story">
+          <a href={`/posts/${lead.id}`} tabindex="-1" aria-hidden="true"><Thumb src={lead.data.image} tone={leadCat} eager /></a>
+          <h3 class="story-title"><a href={`/posts/${lead.id}`}>{lead.data.title}</a></h3>
+          {lead.data.excerpt && <p class="excerpt">{lead.data.excerpt}</p>}
+          <div class="meta">{leadCat && <CatLabel slug={leadCat} />}<span>{formatDate(lead.data.date)}</span><span>{readingLabel(lead.body)}</span></div>
+        </article>
+        <div class="rail">
+          {rail.map((p) => {
+            const c = mainCategory(p, categories);
+            return (
+              <article class="rail-item">
+                <a href={`/posts/${p.id}`} tabindex="-1" aria-hidden="true"><Thumb src={p.data.image} tone={c} /></a>
+                <h3 class="story-title"><a href={`/posts/${p.id}`}>{p.data.title}</a></h3>
+                <div class="meta">{c && <CatLabel slug={c} />}<span>{formatDate(p.data.date)}</span></div>
+              </article>
+            );
+          })}
         </div>
       </div>
-      <svg class="pill" aria-hidden="true" width="80" height="38" viewBox="0 0 84 40" style="top:28px;left:44%;--r:-20deg"><rect x="2" y="2" width="80" height="36" rx="18" fill="#F7C948" stroke="#1E2A4A" stroke-width="2.5"/><path d="M42 2v36" stroke="#1E2A4A" stroke-width="2.5"/></svg>
-      <svg class="pill" aria-hidden="true" width="44" height="44" viewBox="0 0 48 48" style="bottom:18px;left:40%"><circle cx="24" cy="24" r="21" fill="#8E9BC0" stroke="#1E2A4A" stroke-width="2.5"/><path d="M11 24h26" stroke="#1E2A4A" stroke-width="2.5" stroke-linecap="round"/></svg>
-      <svg class="pill" aria-hidden="true" width="72" height="34" viewBox="0 0 76 36" style="bottom:30px;left:16px;--r:25deg"><rect x="2" y="2" width="72" height="32" rx="16" fill="#F48FB1" stroke="#1E2A4A" stroke-width="2.5"/><path d="M38 2v32" stroke="#1E2A4A" stroke-width="2.5"/></svg>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section experiences" aria-labelledby="exp">
     <div class="wrap">
       <div class="section-head">
-        <div><h2>أحدث المقالات</h2><p>جديد المواضيع المتعلقة بالصيدلة</p></div>
-        <a href="/blog" class="more">كل المقالات <Icon name="arrow" size={18} /></a>
+        <div>
+          <h2 id="exp">تجارب واقعية</h2>
+          <p>طلاب وصيادلة يحكون تجربتهم في الدراسة والعمل، كل منطقة بقصصها.</p>
+        </div>
+        <a href="/experiences" class="link-more">كل التجارب <Icon name="arrow" size={18} /></a>
       </div>
-      <div class="grid">{posts.map((p) => <PostCard post={p} />)}</div>
-    </div>
-  </section>
-
-  <section class="section" style="background:#fff;border-block:1px solid var(--line)">
-    <div class="wrap">
-      <div class="section-head">
-        <div><h2>تجارب واقعية</h2><p>تجارب طلاب درسوا الصيدلة في دول مختلفة</p></div>
-        <a href="/experiences" class="more">كل التجارب <Icon name="arrow" size={18} /></a>
-      </div>
-      <div class="regions">
+      <div class="chapters">
         {regions.map((r) => (
-          <a class="region" href={`/category/${r}`}>
-            <img src={categories[r].image} alt="" loading="lazy" />
-            <div><strong>{categories[r].name}</strong><small>{categories[r].nameEn}</small></div>
-          </a>
+          <section class={`chapter tone--${r.slug}`} aria-labelledby={`ch-${r.slug}`}>
+            <a class="chapter-cover" href={`/category/${r.slug}`} tabindex="-1" aria-hidden="true"><img src={r.image} alt="" loading="lazy" decoding="async" /></a>
+            <h3 id={`ch-${r.slug}`}><a href={`/category/${r.slug}`}>{r.name.replace('تجارب من ', '')}</a></h3>
+            <div class="sub"><span class="ltr">{r.nameEn}</span><span>{articlesLabel(r.count)}</span></div>
+            <ul>{r.latest.map((p) => <li><a href={`/posts/${p.id}`}>{p.data.title}</a></li>)}</ul>
+          </section>
         ))}
       </div>
+      <p class="swipe-hint">اسحب لترى باقي المناطق</p>
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      <div class="policy-banner">
-        <div class="badge"><Icon name="shield" size={32} /></div>
-        <div>
-          <h2>سياسات وقرارات وزارة الصحة الكويتية</h2>
-          <p>القوانين والقرارات الوزارية الخاصة بالصيدلة وتراخيص المهنة والأدوية في مكان واحد.</p>
-          <a href="/policies" class="btn btn-primary">تصفح السياسات <Icon name="arrow" size={18} /></a>
-        </div>
+  <section class="section policies-home" aria-labelledby="pol">
+    <div class="wrap split">
+      <div class="intro">
+        <h2 id="pol">سياسات وزارة الصحة الكويتية</h2>
+        <p>القوانين والقرارات الوزارية الخاصة بالصيدلة وتراخيص المهنة والأدوية في مكان واحد، مع رابط النص لكل قرار.</p>
+        <a href="/policies" class="btn btn-primary">تصفح كل السياسات <Icon name="arrow" size={18} /></a>
+      </div>
+      <div>
+        <ul class="ledger" aria-label="أحدث القرارات">
+          {policies.map((p) => (
+            <li>
+              <span class="num">{p.data.number ?? p.data.year}</span>
+              <strong>{p.data.title}</strong>
+              <small>{policyCategories[p.data.category]}{fmtPolicyDate(p.data.date, p.data.year) && ` – ${fmtPolicyDate(p.data.date, p.data.year)}`}</small>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </section>
 
-  <section class="section" style="padding-top:0">
-    <div class="wrap">
-      <div class="cta" style="max-width:none;margin:0">
-        <p>تفقد قناتنا على اليوتيوب، أو احجز استشارة خاصة</p>
+  <section class="section" aria-label="المكتبة والمراجع">
+    <div class="wrap shelves">
+      <div class="shelf">
+        <h2>مكتبة الصيادلة</h2>
+        <p>دراسات منشورة طُبّقت في مستشفيات وصيدليات الكويت والخليج.</p>
+        <ul class="study-list">
+          {studies.map((s) => (
+            <li><a href={s.data.url} target="_blank" rel="noopener">
+              <span class="t">{s.data.title}</span>
+              <span class="s">{[s.data.journal, s.data.year].filter(Boolean).join(', ')}</span>
+            </a></li>
+          ))}
+        </ul>
+        <a href="/library" class="link-more">كل الدراسات ({library.length}) <Icon name="arrow" size={18} /></a>
+      </div>
+      <div class="shelf">
+        <h2>المراجع</h2>
+        <p>مصادر مجانية وموثوقة لكل طالب وصيدلي.</p>
+        <ul class="res-links">
+          {resSections.map((s) => (
+            <li><a href={`/resources#${s.key}`}><Icon name={s.icon} size={22} />{s.title}<span class="n">{s.count}</span></a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section author-band" aria-labelledby="me">
+    <div class="wrap author">
+      <div class="author-art"><Hawan size={210} animate={false} decorative /></div>
+      <div>
+        <h2 id="me">أنا موضي أمان</h2>
+        <p>محبّة للعطاء، بدأت العمل في وزارة الصحة في الكويت، وأشارك هنا تجارب الدراسة والعمل في الصيدلة لتساعدك تختار طريقك.</p>
+        <ul class="creds">
+          <li>بكالوريوس صيدلة <span class="ltr">(BPharm)</span></li>
+          <li>ماجستير صيدلة إكلينيكية من <span class="ltr">UCL</span></li>
+          <li>البورد الأمريكي في العلاجيات <span class="ltr">(BCPS)</span></li>
+        </ul>
         <div class="btns">
-          <a href={site.social.youtube} class="btn btn-teal"><Icon name="youtube" /> YouTube</a>
-          <a href="/consultations" class="btn btn-primary"><Icon name="chat" /> الاستشارات</a>
+          <a href="/consultations" class="btn btn-primary"><Icon name="chat" /> احجز استشارة</a>
+          <a href={site.social.youtube} class="btn btn-quiet"><Icon name="youtube" /> قناة اليوتيوب</a>
         </div>
       </div>
     </div>

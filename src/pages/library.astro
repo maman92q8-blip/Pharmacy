@@ -4,60 +4,70 @@ import Icon from '../components/Icon.astro';
 import { getCollection } from 'astro:content';
 const all = (await getCollection('library')).sort((a, b) => (b.data.year ?? 0) - (a.data.year ?? 0));
 const tabs = [
-  { key: 'kuwait', label: 'دراسات من الكويت', flag: '🇰🇼', items: all.filter((s) => s.data.region === 'kuwait') },
-  { key: 'gcc', label: 'دراسات من الخليج', flag: '🌍', items: all.filter((s) => s.data.region === 'gcc') },
+  { key: 'kuwait', label: 'دراسات من الكويت', items: all.filter((s) => s.data.region === 'kuwait') },
+  { key: 'gcc', label: 'دراسات من الخليج', items: all.filter((s) => s.data.region === 'gcc') },
 ];
 ---
 <Base title="مكتبة الصيادلة" description="دراسات صيدلانية منشورة طُبّقت في مراكز ومستشفيات الكويت ودول الخليج." image="/images/library-hero.jpg">
-  <section class="lib-hero">
-    <div class="wrap lib-hero-grid">
+  <div class="page-head">
+    <div class="wrap lib-head">
       <div>
-        <span class="eyebrow"><Icon name="library" size={16} /> مكتبة الصيادلة</span>
         <h1>أبحاث من صيدلياتنا ومستشفياتنا</h1>
         <p>دراسات منشورة طُبّقت في مراكز ومستشفيات الكويت ودول الخليج، عن الصيدلة الإكلينيكية والرعاية الصيدلانية وسلامة الأدوية.</p>
-        <div class="lib-stats">
-          <span><b>{tabs[0].items.length}</b> من الكويت</span>
-          <span><b>{tabs[1].items.length}</b> من الخليج</span>
+        <div class="stats">
+          <div><b>{tabs[0].items.length}</b><span>دراسة من الكويت</span></div>
+          <div><b>{tabs[1].items.length}</b><span>دراسة من الخليج</span></div>
         </div>
       </div>
-      <img src="/images/library-hero.jpg" alt="" class="lib-hero-img" />
+      <img src="/images/library-hero.jpg" alt="" fetchpriority="high" />
     </div>
-  </section>
+  </div>
 
-  <section class="section" style="padding-top:28px">
-    <div class="wrap">
-      <div class="lib-tabs" role="tablist">
+  <section class="section" style="padding-top:24px">
+    <div class="wrap" style="max-width:960px">
+      <div class="tabs" role="tablist" aria-label="المنطقة">
         {tabs.map((t, i) => (
-          <button role="tab" type="button" aria-selected={i === 0 ? 'true' : 'false'} data-tab={t.key}>
-            <span aria-hidden="true">{t.flag}</span> {t.label} <span class="count">{t.items.length}</span>
+          <button role="tab" type="button" id={`tab-${t.key}`} aria-controls={`panel-${t.key}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-tab={t.key}>
+            {t.label} <span class="count">{t.items.length}</span>
           </button>
         ))}
       </div>
       {tabs.map((t, i) => (
-        <div class="study-grid" role="tabpanel" data-panel={t.key} hidden={i !== 0}>
+        <ul class="studies" role="tabpanel" id={`panel-${t.key}`} aria-labelledby={`tab-${t.key}`} data-panel={t.key} hidden={i !== 0}>
           {t.items.map((s) => (
-            <a class="study" href={s.data.url} target="_blank" rel="noopener">
-              <div class="study-tags">
-                <span class="tag">{s.data.country}</span>
-                {s.data.topic && <span class="tag soft">{s.data.topic}</span>}
-                {s.data.year && <span class="year">{s.data.year}</span>}
-              </div>
-              <h3 dir="ltr">{s.data.title}</h3>
-              {(s.data.authors || s.data.journal) && <p class="src" dir="ltr">{[s.data.authors, s.data.journal].filter(Boolean).join(' · ')}</p>}
-              {s.data.summary && <p class="sum">{s.data.summary}</p>}
-              <span class="go">قراءة الدراسة <Icon name="external" size={15} /></span>
-            </a>
+            <li>
+              <a href={s.data.url} target="_blank" rel="noopener">
+                <span class="tags">
+                  <span class="topic">{s.data.topic ?? s.data.country}</span>
+                  {s.data.topic && <span>{s.data.country}</span>}
+                  {s.data.year && <span class="year">{s.data.year}</span>}
+                </span>
+                <h2>{s.data.title}</h2>
+                {(s.data.authors || s.data.journal) && <p class="src">{[s.data.authors, s.data.journal].filter(Boolean).join(', ')}</p>}
+                {s.data.summary && <p class="sum">{s.data.summary}</p>}
+                <span class="go">قراءة الدراسة <Icon name="external" size={15} /><span class="sr">(تفتح في نافذة جديدة)</span></span>
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
       ))}
-      <p class="note" style="margin-top:28px">عندك دراسة من الكويت أو الخليج تحب نضيفها؟ <a href="https://instagram.com/moudhi_aman">راسلينا على إنستغرام</a>.</p>
+      <p class="notice" style="margin-top:36px"><Icon name="info" size={18} /><span>عندك دراسة من الكويت أو الخليج تحب نضيفها؟ <a href="https://instagram.com/moudhi_aman">راسلينا على إنستغرام</a>.</span></p>
     </div>
   </section>
   <script>
     const btns = [...document.querySelectorAll<HTMLButtonElement>('[data-tab]')];
-    btns.forEach((b) => b.addEventListener('click', () => {
-      btns.forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+    const select = (b: HTMLButtonElement) => {
+      btns.forEach((x) => { const on = x === b; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; });
       document.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== b.dataset.tab));
-    }));
+    };
+    btns.forEach((b, i) => {
+      b.addEventListener('click', () => select(b));
+      b.addEventListener('keydown', (e) => {
+        // RTL: the left arrow moves to the next tab
+        const d = e.key === 'ArrowLeft' ? 1 : e.key === 'ArrowRight' ? -1 : 0;
+        if (!d) return;
+        const n = btns[(i + d + btns.length) % btns.length]; select(n); n.focus(); e.preventDefault();
+      });
+    });
   </script>
 </Base>

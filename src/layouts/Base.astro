@@ -10,17 +10,17 @@ const { title, description = site.description, image } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} – ${site.tagline}`;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
+// Main sections. `short` is used in the header, `label` + `desc` in the menu.
 const nav = [
-  { href: '/', label: 'الرئيسية', icon: 'home' },
-  { href: '/blog', label: 'المدونة', icon: 'book' },
-  { href: '/experiences', label: 'تجارب واقعية', icon: 'globe' },
-  { href: '/library', label: 'مكتبة الصيادلة', icon: 'library' },
-  { href: '/resources', label: 'المراجع', icon: 'doc' },
-  { href: '/policies', label: 'سياسات وزارة الصحة', icon: 'shield' },
-  { href: '/consultations', label: 'الاستشارات', icon: 'chat' },
+  { href: '/blog', label: 'المدونة', short: 'المدونة', desc: 'كل المقالات، مع البحث والتصنيفات', icon: 'book' },
+  { href: '/experiences', label: 'تجارب واقعية', short: 'تجارب واقعية', desc: 'طلاب وصيادلة درسوا في بريطانيا وأمريكا والدول العربية', icon: 'globe' },
+  { href: '/library', label: 'مكتبة الصيادلة', short: 'المكتبة', desc: 'دراسات منشورة من الكويت والخليج', icon: 'library' },
+  { href: '/resources', label: 'المراجع', short: 'المراجع', desc: 'دورات مجانية، قنوات، مراجع وتطبيقات', icon: 'doc' },
+  { href: '/policies', label: 'سياسات وزارة الصحة', short: 'السياسات', desc: 'القوانين والقرارات الخاصة بالصيدلة في الكويت', icon: 'shield' },
+  { href: '/consultations', label: 'الاستشارات', short: 'الاستشارات', desc: 'احجز استشارة عن دراستك أو مسارك المهني', icon: 'chat' },
 ];
-const footerExtra = [{ href: '/about', label: 'من أنا' }];
-const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const isActive = (href: string) => path === href || path.startsWith(href + '/') ||
+  (href === '/blog' && (path.startsWith('/posts') || path.startsWith('/category')));
 ---
 <!doctype html>
 <html lang="ar" dir="rtl">
@@ -34,66 +34,110 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
   {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
   <meta name="theme-color" content="#1e2a4a" />
   <link rel="icon" href="/images/2022-05-FavIcon-1.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/rubik-arabic-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/amiri-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 <body>
   <a class="skip" href="#main">تخطَّ إلى المحتوى</a>
   <header class="site-header">
     <div class="wrap header-row">
-      <a href="/" class="brand" aria-label={site.name}>
-        <span class="brand-mark" aria-hidden="true"><Hawan size={40} animate={false} /></span>
+      <a href="/" class="brand" aria-label={`${site.name} – الرئيسية`}>
+        <span class="brand-mark"><Hawan size={40} animate={false} decorative /></span>
         <span class="brand-text"><b>RX</b>periences</span>
       </a>
       <nav class="main-nav" aria-label="القائمة الرئيسية">
         {nav.map((n) => (
-          <a href={n.href} class:list={['nav-link', { active: active(n.href), policy: n.icon === 'shield' }]}>
-            <Icon name={n.icon} />
-            <span>{n.label}</span>
-          </a>
+          <a href={n.href} class="nav-link" aria-current={isActive(n.href) ? 'page' : undefined}>{n.short}</a>
         ))}
       </nav>
-      <a href="/blog#search" class="icon-btn" aria-label="بحث"><Icon name="search" /></a>
+      <div class="header-actions">
+        <button type="button" class="icon-btn" data-open-sheet="search" aria-label="بحث في المقالات" aria-haspopup="dialog"><Icon name="search" size={22} /></button>
+        <button type="button" class="menu-btn" data-open-sheet="menu" aria-haspopup="dialog"><Icon name="menu" size={20} /> القائمة</button>
+      </div>
     </div>
   </header>
+
+  <dialog class="sheet" aria-label="القائمة والبحث" data-sheet>
+    <div class="sheet-inner">
+      <div class="sheet-top">
+        <a href="/" class="brand"><span class="brand-mark"><Hawan size={40} animate={false} decorative /></span><span class="brand-text"><b>RX</b>periences</span></a>
+        <button type="button" class="icon-btn" data-close-sheet aria-label="إغلاق"><Icon name="close" size={22} /></button>
+      </div>
+      <form class="searchbox" role="search" action="/blog" method="get">
+        <label for="sheet-search" class="sr">ابحث في المقالات</label>
+        <Icon name="search" />
+        <input id="sheet-search" type="search" name="q" placeholder="ابحث في المقالات…" autocomplete="off" enterkeyhint="search" required />
+        <button type="submit">ابحث</button>
+      </form>
+      <nav class="sheet-nav" aria-label="أقسام الموقع">
+        <a href="/" aria-current={path === '/' ? 'page' : undefined}><strong>الرئيسية</strong><Icon name="home" size={22} /></a>
+        {nav.map((n) => (
+          <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}><strong>{n.label}</strong><span>{n.desc}</span><Icon name={n.icon} size={22} /></a>
+        ))}
+        <a href="/about" aria-current={path === '/about' ? 'page' : undefined}><strong>من أنا</strong><span>تعرّف على موضي أمان</span><Icon name="user" size={22} /></a>
+      </nav>
+      <div class="sheet-social social">
+        <a href={site.social.instagram} aria-label="Instagram"><Icon name="instagram" /></a>
+        <a href={site.social.youtube} aria-label="YouTube"><Icon name="youtube" /></a>
+        <a href={site.social.twitter} aria-label="X / Twitter"><Icon name="x" /></a>
+      </div>
+    </div>
+  </dialog>
 
   <main id="main"><slot /></main>
 
   <MascotDock path={path} />
 
-  <!-- Bottom bar on phones: one tap to every section -->
-  <nav class="tabbar" aria-label="تنقل سريع">
-    {nav.filter((n) => ['/', '/blog', '/library', '/resources', '/policies'].includes(n.href)).map((n) => (
-      <a href={n.href} class:list={{ active: active(n.href) }}>
-        <Icon name={n.icon} />
-        <span>{n.label === 'سياسات وزارة الصحة' ? 'السياسات' : n.label === 'مكتبة الصيادلة' ? 'المكتبة' : n.label}</span>
-      </a>
-    ))}
-  </nav>
-
   <footer class="site-footer">
     <div class="wrap footer-grid">
       <div>
-        <a href="/" class="brand light"><span class="brand-mark" aria-hidden="true"><Hawan size={40} animate={false} /></span><span class="brand-text"><b>RX</b>periences</span></a>
+        <a href="/" class="brand"><span class="brand-mark"><Hawan size={40} animate={false} decorative /></span><span class="brand-text"><b>RX</b>periences</span></a>
         <p>{site.description}</p>
       </div>
       <div>
-        <h3>روابط</h3>
+        <h2>اقرأ</h2>
         <ul>
-          {[...nav.slice(1), ...footerExtra].map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          <li><a href="/blog">المدونة</a></li>
+          <li><a href="/experiences">تجارب واقعية</a></li>
+          <li><a href="/category/pharmacy-articles">المقالات الصيدلانية</a></li>
         </ul>
       </div>
       <div>
-        <h3>تابعنا</h3>
-        <div class="social">
+        <h2>مراجع</h2>
+        <ul>
+          <li><a href="/library">مكتبة الصيادلة</a></li>
+          <li><a href="/resources">المراجع</a></li>
+          <li><a href="/policies">سياسات وزارة الصحة</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>تواصل</h2>
+        <ul>
+          <li><a href="/consultations">الاستشارات</a></li>
+          <li><a href="/about">من أنا</a></li>
+        </ul>
+        <div class="social" style="margin-top:14px">
           <a href={site.social.instagram} aria-label="Instagram"><Icon name="instagram" /></a>
           <a href={site.social.youtube} aria-label="YouTube"><Icon name="youtube" /></a>
           <a href={site.social.twitter} aria-label="X / Twitter"><Icon name="x" /></a>
         </div>
       </div>
     </div>
-    <p class="wrap copy">© {new Date().getFullYear()} {site.author} – {site.name}</p>
+    <div class="wrap"><p class="copy"><span>© {new Date().getFullYear()} {site.author} – {site.name}</span><span class="ltr">{site.taglineEn}</span></p></div>
   </footer>
+
+  <script>
+    const sheet = document.querySelector<HTMLDialogElement>('[data-sheet]')!;
+    const field = sheet.querySelector<HTMLInputElement>('input[type=search]')!;
+    document.querySelectorAll<HTMLButtonElement>('[data-open-sheet]').forEach((b) =>
+      b.addEventListener('click', () => {
+        sheet.showModal();
+        if (b.dataset.openSheet === 'search') field.focus();
+        else sheet.querySelector<HTMLElement>('[data-close-sheet]')!.focus();
+      }));
+    sheet.querySelector('[data-close-sheet]')!.addEventListener('click', () => sheet.close());
+    // close when tapping the dimmed backdrop
+    sheet.addEventListener('click', (e) => { if (e.target === sheet) sheet.close(); });
+  </script>
 </body>
 </html>

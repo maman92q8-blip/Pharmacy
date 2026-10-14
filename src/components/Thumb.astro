@@ -1,0 +1,11 @@
+---
+// Post image, or Hawan on the category colour when a post has no image.
+import Hawan from './Hawan.astro';
+interface Props { src?: string; tone?: string; eager?: boolean; class?: string }
+const { src, tone = 'none', eager = false, class: cls } = Astro.props;
+---
+<span class:list={['thumb', `tone--${tone}`, { placeholder: !src }, cls]} aria-hidden="true">
+  {src
+    ? <img src={src} alt="" loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : undefined} />
+    : <Hawan size={120} animate={false} decorative />}
+</span>

@@ -12,38 +12,39 @@ const fmt = (d: Date) => d.toLocaleDateString('ar-KW-u-nu-latn', { year: 'numeri
 <Base title="سياسات وزارة الصحة الكويتية" description="القوانين والقرارات الوزارية الكويتية الخاصة بالصيدلة وتراخيص المهنة والأدوية.">
   <div class="page-head">
     <div class="wrap">
-      <h1 style="display:flex;align-items:center;gap:12px"><span class="brand-mark" style="background:var(--amber);color:var(--navy)"><Icon name="shield" size={22} /></span>سياسات وزارة الصحة الكويتية</h1>
+      <h1>سياسات وزارة الصحة الكويتية</h1>
       <p>القوانين والقرارات الوزارية المنشورة المتعلقة بالصيدلة وتراخيص مزاولة المهنة وتسجيل الأدوية وتداولها.</p>
     </div>
   </div>
-  <section class="section" style="padding-top:28px">
-    <div class="wrap" style="max-width:900px">
-      <p class="note">هذه الصفحة دليل مرجعي وليست بديلاً عن النص الرسمي. الروابط تقود إلى مصدر نشر كل قرار؛ تأكد دائماً من النص المعتمد في الجريدة الرسمية «الكويت اليوم» أو من وزارة الصحة قبل الاعتماد عليه.</p>
+  <section class="section" style="padding-top:8px">
+    <div class="wrap" style="max-width:920px">
+      <p class="notice"><Icon name="info" size={18} /><span>هذه الصفحة دليل مرجعي وليست بديلاً عن النص الرسمي. الروابط تقود إلى مصدر نشر كل قرار؛ تأكد دائماً من النص المعتمد في الجريدة الرسمية «الكويت اليوم» أو من وزارة الصحة قبل الاعتماد عليه.</span></p>
       <div class="toolbar">
-        <label class="search"><Icon name="search" /><input type="search" placeholder="ابحث برقم القرار أو الموضوع… مثلاً: 160، تراخيص، المخدرات" data-psearch /></label>
+        <form class="searchbox" role="search" onsubmit="return false">
+          <label for="policy-search" class="sr">ابحث في السياسات</label>
+          <Icon name="search" />
+          <input id="policy-search" type="search" placeholder="ابحث برقم القرار أو الموضوع… مثلاً: 160، تراخيص، المخدرات" autocomplete="off" data-psearch />
+        </form>
       </div>
       {groups.map((g) => (
-        <div class="policy-group" data-group>
-          <h2>{g.name} <span class="count">{g.items.length}</span></h2>
+        <section class="policy-group" data-group aria-labelledby={`g-${g.key}`}>
+          <h2 class="group-title" id={`g-${g.key}`}>{g.name} <span class="count">{g.items.length}</span></h2>
           {g.items.map((p) => (
             <div class="policy" data-ptext={`${p.data.title} ${p.data.title_en ?? ''} ${p.data.number ?? ''} ${p.data.summary ?? ''}`}>
-              <div class="doc"><Icon name="doc" size={22} /></div>
-              <div>
-                <h3>{p.data.title}</h3>
-                {p.data.title_en && <p class="en">{p.data.title_en}</p>}
-                {p.data.summary && <p class="sum">{p.data.summary}</p>}
-                <div class="row">
-                  {p.data.number && <span class="chip">رقم {p.data.number}</span>}
-                  {p.data.date && <span><Icon name="calendar" size={15} />{fmt(p.data.date)}</span>}
-                  <a href={p.data.url} target="_blank" rel="noopener">{p.data.category === 'official' ? 'زيارة الموقع' : 'قراءة القرار'} <Icon name="external" size={15} /></a>
-                  {p.data.source && <span>المصدر: {p.data.source}</span>}
-                </div>
+              <h3>{p.data.title}</h3>
+              {p.data.title_en && <p class="en">{p.data.title_en}</p>}
+              {p.data.summary && <p class="sum">{p.data.summary}</p>}
+              <div class="row">
+                {p.data.number && <span class="num">{p.data.number}</span>}
+                {p.data.date && <span><time datetime={p.data.date.toISOString().slice(0, 10)}>{fmt(p.data.date)}</time></span>}
+                <a href={p.data.url} target="_blank" rel="noopener">{p.data.category === 'official' ? 'زيارة الموقع' : 'قراءة القرار'} <Icon name="external" size={15} /><span class="sr">(تفتح في نافذة جديدة)</span></a>
+                {p.data.source && <span>المصدر: {p.data.source}</span>}
               </div>
             </div>
           ))}
-        </div>
+        </section>
       ))}
-      <p class="empty" data-pempty hidden>لا توجد نتائج.</p>
+      <div class="empty" data-pempty hidden><strong>ما لقينا قرارات بهذه الكلمات.</strong>جرّب رقم القرار فقط، مثل 160.</div>
     </div>
   </section>
   <script>

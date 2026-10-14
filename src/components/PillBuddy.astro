@@ -1,7 +1,9 @@
 ---
-// "حبّة" – Hawan's little capsule friend. Bounces and waves.
+// "حبّة" – Hawan's little capsule friend. Waves in the home hero.
+interface Props { class?: string }
+const { class: cls = 'buddy' } = Astro.props;
 ---
-<svg class="buddy" role="img" aria-label="حبّة، صديقة هاون" viewBox="0 0 120 170">
+<svg class={cls} aria-hidden="true" viewBox="0 0 120 170">
   <path class="arm" d="M98 82l18-22" stroke="#1E2A4A" stroke-width="6" stroke-linecap="round"/>
   <path d="M22 82l-16 18" stroke="#1E2A4A" stroke-width="6" stroke-linecap="round"/>
   <path d="M46 150v14M74 150v14" stroke="#1E2A4A" stroke-width="6" stroke-linecap="round"/>

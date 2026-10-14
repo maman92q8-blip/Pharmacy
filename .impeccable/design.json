@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-14T20:32:00+03:00",
+  "title": "Design System: RXperiences",
+  "extensions": {
+    "colorMeta": {
+      "ink-navy": { "role": "primary", "displayName": "Ink Navy" },
+      "rx-pink": { "role": "primary", "displayName": "Rx Pink" },
+      "rx-pink-deep": { "role": "primary", "displayName": "Deep Rx Pink" },
+      "sunny": { "role": "secondary", "displayName": "Sunny" },
+      "sunny-soft": { "role": "secondary", "displayName": "Sunny Soft" },
+      "blush": { "role": "tertiary", "displayName": "Blush" },
+      "candy": { "role": "tertiary", "displayName": "Candy" },
+      "lilac": { "role": "tertiary", "displayName": "Lilac" },
+      "lilac-soft": { "role": "tertiary", "displayName": "Lilac Soft" },
+      "paper": { "role": "neutral", "displayName": "Paper" },
+      "white": { "role": "neutral", "displayName": "White" },
+      "muted": { "role": "neutral", "displayName": "Muted Ink" },
+      "hairline": { "role": "neutral", "displayName": "Hairline" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Home masthead headline only." },
+      "headline": { "displayName": "Headline", "purpose": "Section and page headings (Rubik)." },
+      "story-title": { "displayName": "Story title", "purpose": "Every article title, everywhere (Amiri)." },
+      "story-body": { "displayName": "Story body", "purpose": "The article reading column (Noto Naskh Arabic)." },
+      "body": { "displayName": "Body", "purpose": "Interface copy and excerpts (Rubik)." },
+      "label": { "displayName": "Label", "purpose": "Category labels and meta lines." }
+    },
+    "shadows": [
+      { "name": "sticker", "value": "3px 3px 0 #1e2a4a", "purpose": "Brand sticker: primary buttons and mascot speech bubbles only." },
+      { "name": "sticker-lift", "value": "4px 5px 0 #1e2a4a", "purpose": "Primary button hover." }
+    ],
+    "motion": [
+      { "name": "ease", "value": "cubic-bezier(.16, 1, .3, 1)", "purpose": "Exponential ease-out for all state transitions." },
+      { "name": "masthead-reveal", "value": "rise .7s, staggered .08s", "purpose": "The one orchestrated moment: home masthead text rises, Hawan stirs three times, Habba waves, then they rest." },
+      { "name": "page-transition", "value": "cross-document view transition: out .18s, in .32s", "purpose": "Soft fade between pages; off under reduced motion." }
+    ],
+    "breakpoints": [
+      { "name": "phone-list", "value": "639px" },
+      { "name": "chapters-grid", "value": "700px" },
+      { "name": "two-column", "value": "900px" },
+      { "name": "full-nav", "value": "1080px" },
+      { "name": "mascot-dock", "value": "1480px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main action: sunny pill with navy outline and the brand sticker shadow.",
+      "html": "<button class=\"ds-btn-primary\">احجز استشارة</button>",
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; gap:8px; min-height:48px; padding:10px 22px; border-radius:999px; border:2px solid #1e2a4a; background:#f7c948; color:#1e2a4a; font:700 16.5px/1.2 Rubik, sans-serif; box-shadow:3px 3px 0 #1e2a4a; transition:transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s cubic-bezier(.16,1,.3,1); cursor:pointer; } .ds-btn-primary:hover { transform:translate(-1px,-2px); box-shadow:4px 5px 0 #1e2a4a; } .ds-btn-primary:active { transform:translate(2px,2px); box-shadow:1px 1px 0 #1e2a4a; } .ds-btn-primary:focus-visible { outline:3px solid #c43c6e; outline-offset:3px; }"
+    },
+    {
+      "name": "Quiet Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Secondary action: outlined pill, no shadow.",
+      "html": "<button class=\"ds-btn-quiet\">قناة اليوتيوب</button>",
+      "css": ".ds-btn-quiet { display:inline-flex; align-items:center; min-height:48px; padding:10px 22px; border-radius:999px; border:2px solid #1e2a4a; background:transparent; color:#1e2a4a; font:700 16.5px/1.2 Rubik, sans-serif; transition:background-color .18s; cursor:pointer; } .ds-btn-quiet:hover { background:#fff; } .ds-btn-quiet:focus-visible { outline:3px solid #c43c6e; outline-offset:3px; }"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "search-field",
+      "description": "Pill search with a navy submit inside the end.",
+      "html": "<form class=\"ds-search\" dir=\"rtl\"><input type=\"search\" placeholder=\"مثلاً: فارم دي، ماجستير، إيرلندا\"><button>ابحث</button></form>",
+      "css": ".ds-search { position:relative; display:flex; max-width:520px; } .ds-search input { width:100%; min-height:54px; padding:12px 18px 12px 96px; border-radius:999px; border:2px solid #1e2a4a; background:#fff; color:#1e2a4a; font:400 17px Rubik, sans-serif; } .ds-search input:focus { outline:none; box-shadow:0 0 0 4px #fbe3ec; } .ds-search button { position:absolute; left:6px; top:6px; min-height:42px; padding:0 18px; border-radius:999px; border:0; background:#1e2a4a; color:#fff; font:700 15.5px Rubik, sans-serif; } .ds-search button:hover { background:#c43c6e; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "filter-chip",
+      "description": "Category filter; selected state is solid navy.",
+      "html": "<div dir=\"rtl\" style=\"display:flex;gap:8px\"><button class=\"ds-chip\" aria-pressed=\"true\">الكل</button><button class=\"ds-chip\" aria-pressed=\"false\">تجارب واقعية</button></div>",
+      "css": ".ds-chip { min-height:40px; padding:6px 16px; border-radius:999px; border:1.5px solid #e8e2d9; background:#fff; color:#1e2a4a; font:500 15px Rubik, sans-serif; cursor:pointer; transition:border-color .2s; } .ds-chip:hover { border-color:#1e2a4a; } .ds-chip[aria-pressed='true'] { background:#1e2a4a; border-color:#1e2a4a; color:#fff; font-weight:700; }"
+    },
+    {
+      "name": "Story Title + Meta",
+      "kind": "custom",
+      "description": "Amiri story title with the category label in the meta line underneath.",
+      "html": "<article dir=\"rtl\" class=\"ds-story\"><h3><a href=\"#\">تجربة من سكوتلاندا: ماستر كلينيكال فارمسي</a></h3><div class=\"ds-meta\"><span class=\"ds-cat\">تجارب من بريطانيا و إيرلندا</span><span>3 سبتمبر 2023</span><span>قراءة في 3 دقائق</span></div></article>",
+      "css": ".ds-story h3 { margin:0; font:700 25px/1.55 Amiri, 'Noto Naskh Arabic', serif; color:#1e2a4a; } .ds-story h3 a { color:inherit; text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:.22em; text-decoration-color:transparent; transition:text-decoration-color .25s, color .2s; } .ds-story h3 a:hover { color:#c43c6e; text-decoration-color:currentColor; } .ds-meta { display:flex; flex-wrap:wrap; gap:4px 16px; font:400 14px/1.5 Rubik, sans-serif; color:#56607a; } .ds-cat { display:inline-flex; align-items:center; gap:7px; font-weight:700; color:#1e2a4a; } .ds-cat::before { content:''; width:14px; height:6px; border-radius:3px; background:#8e9bc0; }"
+    },
+    {
+      "name": "Header Navigation",
+      "kind": "nav",
+      "description": "Text links; active page in pink with an underline.",
+      "html": "<nav dir=\"rtl\" class=\"ds-nav\"><a href=\"#\" aria-current=\"page\">المدونة</a><a href=\"#\">تجارب واقعية</a><a href=\"#\">المكتبة</a></nav>",
+      "css": ".ds-nav { display:flex; gap:2px; } .ds-nav a { position:relative; padding:8px 12px; color:#1e2a4a; text-decoration:none; font:500 16px Rubik, sans-serif; } .ds-nav a::after { content:''; position:absolute; left:12px; right:12px; bottom:2px; height:2px; border-radius:2px; background:#c43c6e; transform:scaleX(0); transition:transform .25s cubic-bezier(.16,1,.3,1); } .ds-nav a:hover::after, .ds-nav a[aria-current='page']::after { transform:scaleX(1); } .ds-nav a[aria-current='page'] { color:#c43c6e; font-weight:700; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Pharmacist's Notebook, Published",
+    "overview": "RXperiences is a personal pharmacy publication from Kuwait: first-hand study and career stories, a policy directory and a research shelf, told in a warm Kuwaiti voice. The system frames those stories like a magazine and lets the brand's hand-made sticker world live in the frame, never in the reading column. The page is light and calm by default; colour commits at section scale; stories speak in Naskh, the brand and interface in Rubik.",
+    "keyCharacteristics": [
+      "Two voices: Amiri / Noto Naskh for stories, Rubik for brand and interface.",
+      "Lists and rails separated by hairlines, not bordered cards.",
+      "Category colour coding like medicine-box bands.",
+      "The navy outline + offset sticker belongs only to mascots and primary buttons.",
+      "Right-to-left first; English inside Arabic is handled, not ignored."
+    ],
+    "rules": [
+      { "name": "The Medicine-Box Rule", "body": "Each category owns one colour: UK & Ireland lilac, USA & Canada candy, Arab countries sunny, pharmacy articles navy. It appears as a short band before the category name, as the mat behind a post with no image, and as a full frame around region photos — never as a one-sided stripe.", "section": "colors" },
+      { "name": "The Section-Scale Rule", "body": "Colour fills whole sections (masthead, policies band, author band), not individual components.", "section": "colors" },
+      { "name": "The Two Voices Rule", "body": "If it is a story (its title or its text), it is set in Naskh. Everything else is Rubik.", "section": "typography" },
+      { "name": "The No-Kicker Rule", "body": "Category labels sit in the meta line under a title, never above it.", "section": "typography" },
+      { "name": "The Sticker Rule", "body": "The ink outline + hard offset belongs to the mascot world: primary buttons, speech bubbles, the mascot dock. Never on cards, images, list rows or panels.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do set every story title in Amiri 700 and article text in Noto Naskh, with English falling back to Rubik.",
+      "Do use the category colour from the Medicine-Box Rule wherever a category is named.",
+      "Do separate list items with 1px hairlines and space, not boxes.",
+      "Do keep the reading column at 35em or less and line-height 1.95.",
+      "Do give motion one orchestrated moment (the home masthead) and respect reduced motion.",
+      "Do mark English-only blocks inside articles as left-to-right."
+    ],
+    "donts": [
+      "Don't put the navy outline + offset shadow on cards, images or panels.",
+      "Don't put labels or eyebrows above headings.",
+      "Don't use grey text on coloured bands; tint from the band or use navy.",
+      "Don't add colour stripes along one side of an element.",
+      "Don't load fonts from Google Fonts; they are self-hosted in /public/fonts."
+    ]
+  }
+}

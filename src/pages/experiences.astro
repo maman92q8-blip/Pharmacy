@@ -2,23 +2,26 @@
 import Base from '../layouts/Base.astro';
 import PostList from '../components/PostList.astro';
 import { categories } from '../data/site';
-import { getPosts } from '../data/posts';
-const posts = (await getPosts()).filter((p) => p.data.experience);
-const regions = ['uk-ireland', 'usa-canada', 'arab-countries'];
+import { getPosts, articlesLabel } from '../data/posts';
+const all = await getPosts();
+const posts = all.filter((p) => p.data.experience);
+const regions = ['uk-ireland', 'usa-canada', 'arab-countries'].map((slug) => ({
+  slug, ...categories[slug], count: all.filter((p) => p.data.categories.includes(slug)).length,
+}));
 ---
 <Base title="تجارب واقعية">
-  <div class="page-head"><div class="wrap"><h1>تجارب واقعية</h1><p>تجارب طلاب وصيادلة درسوا في بريطانيا وإيرلندا وأمريكا والدول العربية.</p></div></div>
-  <section class="section" style="padding-top:28px">
+  <div class="page-head"><div class="wrap"><h1>تجارب واقعية</h1><p>طلاب وصيادلة درسوا في بريطانيا وإيرلندا وأمريكا والدول العربية يحكون تجربتهم: البرنامج، المتطلبات، الصعوبات، والحياة هناك.</p></div></div>
+  <section class="section" style="padding-top:8px">
     <div class="wrap">
-      <div class="regions" style="margin-bottom:36px">
+      <nav class="region-strip" aria-label="التجارب حسب المنطقة">
         {regions.map((r) => (
-          <a class="region" href={`/category/${r}`}>
-            <img src={categories[r].image} alt="" loading="lazy" />
-            <div><strong>{categories[r].name}</strong><small>{categories[r].nameEn}</small></div>
+          <a class={`region-link tone--${r.slug}`} href={`/category/${r.slug}`}>
+            <img src={r.image} alt="" loading="lazy" decoding="async" />
+            <span><strong>{r.name.replace('تجارب من ', '')}</strong><small>{articlesLabel(r.count)}</small></span>
           </a>
         ))}
-      </div>
-      <PostList posts={posts} />
+      </nav>
+      <PostList posts={posts} experienceFilter={false} />
     </div>
   </section>
 </Base>

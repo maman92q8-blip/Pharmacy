@@ -1,0 +1,10 @@
+---
+// Category label with its colour band. Links to the category page.
+import { categories } from '../data/site';
+interface Props { slug: string; link?: boolean }
+const { slug, link = true } = Astro.props;
+const cat = categories[slug];
+---
+{cat && (link
+  ? <a class={`cat cat--${slug}`} href={`/category/${slug}`}>{cat.name}</a>
+  : <span class={`cat cat--${slug}`}>{cat.name}</span>)}
