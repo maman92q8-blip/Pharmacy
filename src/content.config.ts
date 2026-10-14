@@ -40,4 +40,19 @@ const resources = defineCollection({
   }),
 });
 
-export const collections = { posts, policies, resources };
+const library = defineCollection({
+  loader: file('src/data/library.yaml'),
+  schema: z.object({
+    region: z.enum(['kuwait', 'gcc']),
+    country: z.string(),
+    title: z.string(),
+    authors: z.string().optional(),
+    journal: z.string().optional(),
+    year: z.number().optional(),
+    topic: z.string().optional(),
+    summary: z.string().optional(),
+    url: z.string().url(),
+  }),
+});
+
+export const collections = { posts, policies, resources, library };

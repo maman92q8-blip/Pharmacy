@@ -12,11 +12,12 @@ const nav = [
   { href: '/', label: 'الرئيسية', icon: 'home' },
   { href: '/blog', label: 'المدونة', icon: 'book' },
   { href: '/experiences', label: 'تجارب واقعية', icon: 'globe' },
-  { href: '/resources', label: 'المراجع', icon: 'library' },
+  { href: '/library', label: 'مكتبة الصيادلة', icon: 'library' },
+  { href: '/resources', label: 'المراجع', icon: 'doc' },
   { href: '/policies', label: 'سياسات وزارة الصحة', icon: 'shield' },
   { href: '/consultations', label: 'الاستشارات', icon: 'chat' },
-  { href: '/about', label: 'من أنا', icon: 'user' },
 ];
+const footerExtra = [{ href: '/about', label: 'من أنا' }];
 const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
 <!doctype html>
@@ -59,10 +60,10 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
 
   <!-- Bottom bar on phones: one tap to every section -->
   <nav class="tabbar" aria-label="تنقل سريع">
-    {nav.filter((n) => n.icon !== 'globe' && n.icon !== 'user').map((n) => (
+    {nav.filter((n) => ['/', '/blog', '/library', '/resources', '/policies'].includes(n.href)).map((n) => (
       <a href={n.href} class:list={{ active: active(n.href) }}>
         <Icon name={n.icon} />
-        <span>{n.label === 'سياسات وزارة الصحة' ? 'السياسات' : n.label}</span>
+        <span>{n.label === 'سياسات وزارة الصحة' ? 'السياسات' : n.label === 'مكتبة الصيادلة' ? 'المكتبة' : n.label}</span>
       </a>
     ))}
   </nav>
@@ -76,7 +77,7 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
       <div>
         <h3>روابط</h3>
         <ul>
-          {nav.slice(1).map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          {[...nav.slice(1), ...footerExtra].map((n) => <li><a href={n.href}>{n.label}</a></li>)}
         </ul>
       </div>
       <div>

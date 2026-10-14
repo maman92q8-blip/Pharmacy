@@ -1,0 +1,97 @@
+# ✏️ Add a study: copy a block, change the details, commit.
+# region: kuwait | gcc     (gcc = any Gulf country other than Kuwait)
+# Leave out any line you're not sure of (year, journal, summary).
+
+- id: kw-ebm-readiness
+  region: kuwait
+  country: الكويت
+  title: "The readiness of hospital pharmacists in Kuwait to practise evidence-based medicine: a cross-sectional study"
+  journal: "BMC Medical Informatics and Decision Making"
+  year: 2018
+  topic: مستشفيات
+  url: "https://bmcmedinformdecismak.biomedcentral.com/articles/10.1186/s12911-018-0585-y"
+- id: kw-public-perceptions
+  region: kuwait
+  country: الكويت
+  title: "Public Perceptions, Expectations, and Views of Community Pharmacy Practice in Kuwait"
+  authors: "Awad et al."
+  journal: "Medical Principles and Practice"
+  year: 2017
+  topic: صيدليات المجتمع
+  summary: "استبيان شمل 433 موظفاً حكومياً: 52.9% يرجعون للطبيب أولاً في المشاكل الدوائية مقابل 32.3% للصيدلي، رغم أن 58.9% قالوا إنهم يثقون بالصيادلة."
+  url: "https://karger.com/mpp/article/26/5/438/204319/Public-Perceptions-Expectations-and-Views-of"
+- id: kw-cpd-programme
+  region: kuwait
+  country: الكويت
+  title: "The Development and Evaluation of a Structured Continuing Professional Development Programme for Pharmacists in Kuwait: A Feasibility Study"
+  authors: "Al-Haqan et al."
+  journal: "Pharmacy (MDPI)"
+  year: 2020
+  topic: التعليم المستمر
+  summary: "طُبّق في مراكز الرعاية الأولية ومستشفى عام في منطقة العاصمة الصحية؛ أكمل البرنامج 16 من 21 صيدلياً، وكان قابلاً للتطبيق ويُرجّح أنه حسّن ممارستهم."
+  url: "https://www.mdpi.com/2226-4787/8/4/207"
+- id: kw-dtp-private-hospital
+  region: kuwait
+  country: الكويت
+  title: "Drug therapy problems identification by clinical pharmacists in a private hospital in Kuwait"
+  topic: الصيدلة الإكلينيكية
+  url: "https://pubmed.ncbi.nlm.nih.gov/29475557/"
+- id: kw-med-rec
+  region: kuwait
+  country: الكويت
+  title: "Implementing the medicines reconciliation tool in practice: challenges and opportunities for pharmacists in Kuwait"
+  topic: سلامة الأدوية
+  url: "https://pubmed.ncbi.nlm.nih.gov/29475740/"
+- id: kw-practice-change
+  region: kuwait
+  country: الكويت
+  title: "Enablers and challenges to pharmacy practice change in Kuwait hospitals: a qualitative exploration of pharmacists' perceptions"
+  topic: مستشفيات
+  url: "https://pubmed.ncbi.nlm.nih.gov/32929812/"
+- id: kw-pharm-care-hospitals
+  region: kuwait
+  country: الكويت
+  title: "Pharmaceutical care services in hospitals of Kuwait"
+  topic: الرعاية الصيدلانية
+  url: "https://pubmed.ncbi.nlm.nih.gov/16959184/"
+
+- id: gcc-meta-analysis
+  region: gcc
+  country: دول الخليج
+  title: "Impact of Pharmacist-Led Interventions on Patient Outcomes in Gulf Cooperation Council Countries: A Systematic Review and Meta-Analysis"
+  journal: "Pharmacy (MDPI)"
+  year: 2026
+  topic: مراجعة منهجية
+  url: "https://www.mdpi.com/2226-4787/14/4/102"
+- id: qa-hmc-interventions
+  region: gcc
+  country: قطر
+  title: "Characteristics of the clinical pharmacists' interventions at the main general tertiary care hospital in Qatar"
+  topic: الصيدلة الإكلينيكية
+  url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10611941/"
+- id: om-squh-antimicrobial
+  region: gcc
+  country: عُمان
+  title: "Clinical and Cost Implications of Clinical Pharmacist Interventions on Antimicrobial Use at Sultan Qaboos University Hospital in Oman"
+  topic: المضادات الحيوية
+  url: "https://pubmed.ncbi.nlm.nih.gov/34242762/"
+- id: sa-taif-icu
+  region: gcc
+  country: السعودية
+  title: "Impact of Clinical Pharmacist Intervention on Clinical Outcomes in the Critical Care Unit, Taif City, Saudi Arabia: A Retrospective Study"
+  journal: "Pharmacy (MDPI)"
+  year: 2022
+  topic: العناية المركزة
+  url: "https://doi.org/10.3390/pharmacy10050108"
+- id: sa-tertiary-interventions
+  region: gcc
+  country: السعودية
+  title: "Evaluating Clinical Pharmacist Interventions in a Tertiary Care Hospital: A Retrospective Study from Saudi Arabia"
+  topic: الصيدلة الإكلينيكية
+  url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12524669/"
+- id: ae-pharm-care-views
+  region: gcc
+  country: الإمارات
+  title: "Current views of community and hospital pharmacists on pharmaceutical care services in the United Arab Emirates: A mixed methodological study"
+  topic: الرعاية الصيدلانية
+  url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9745206/"
