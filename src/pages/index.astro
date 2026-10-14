@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import Hawan from '../components/Hawan.astro';
 import PillBuddy from '../components/PillBuddy.astro';
+import JournalsArt from '../components/JournalsArt.astro';
 import { site, categories, policyCategories } from '../data/site';
 import { getPosts, formatDate, articlesLabel } from '../data/posts';
 
@@ -15,7 +16,6 @@ const when = (p: { data: { date?: Date; year?: number } }) => p.data.date?.value
 const policies = (await getCollection('policies')).filter((p) => p.data.category !== 'official').sort((a, b) => when(b) - when(a));
 const policy = policies[0];
 const library = (await getCollection('library')).sort((a, b) => (b.data.year ?? 0) - (a.data.year ?? 0));
-const study = library.find((s) => s.data.region === 'kuwait') ?? library[0];
 const resources = await getCollection('resources');
 
 // The sections a reader can choose from: a picture, a name and one line each.
@@ -85,16 +85,11 @@ const sections = [
           <a href="/policies" class="btn btn-primary">تصفح كل السياسات ({policies.length}) <Icon name="arrow" size={18} /></a>
         </div>
       )}
-      {study && (
-        <div class="update update--study">
-          <h2>دراسة من {study.data.country}</h2>
-          <a class="one" href={study.data.url} target="_blank" rel="noopener">
-            <strong class="ltr-title">{study.data.title}</strong>
-            <small><span class="ltr">{[study.data.journal, study.data.year].filter(Boolean).join(', ')}</span></small>
-          </a>
-          <a href="/library" class="btn btn-primary">تصفح كل الدراسات ({library.length}) <Icon name="arrow" size={18} /></a>
-        </div>
-      )}
+      <div class="update update--study">
+        <h2>آخر الدراسات</h2>
+        <a href="/library" class="journals" tabindex="-1" aria-hidden="true"><JournalsArt /></a>
+        <a href="/library" class="btn btn-primary">تصفح كل الدراسات ({library.length}) <Icon name="arrow" size={18} /></a>
+      </div>
     </div>
   </section>
 

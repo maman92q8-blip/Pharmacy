@@ -1,0 +1,28 @@
+---
+// Stack of research journals with a magnifier, drawn in the same sticker style as Hawan (navy outline, brand colours).
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+<svg class={cls} viewBox="0 0 360 240" aria-hidden="true" fill="none" stroke="#1E2A4A" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+  <!-- standing journals -->
+  <rect x="42" y="58" width="44" height="150" rx="6" fill="#8E9BC0"/>
+  <path d="M52 80h24M52 92h24" />
+  <rect x="86" y="40" width="40" height="168" rx="6" fill="#F48FB1"/>
+  <path d="M96 62h20M96 74h20" />
+  <rect x="126" y="70" width="38" height="138" rx="6" fill="#F7C948"/>
+  <path d="M135 92h20M135 104h20" />
+  <!-- leaning journal -->
+  <rect x="166" y="66" width="40" height="146" rx="6" fill="#FFFFFF" transform="rotate(12 186 139)"/>
+  <path d="M182 92l18 4M180 104l18 4" />
+  <!-- open journal with a chart -->
+  <path d="M206 208c22-10 44-10 62 0c18-10 40-10 62 0V122c-22-10-44-10-62 0c-18-10-40-10-62 0z" fill="#FFFFFF"/>
+  <path d="M268 122v86" />
+  <path d="M220 150h34M220 162h34M220 174h24" stroke-width="4"/>
+  <path d="M282 182l12-16 10 8 14-22" stroke="#C43C6E" stroke-width="5"/>
+  <!-- shelf line -->
+  <path d="M28 210h304" />
+  <!-- magnifier -->
+  <circle cx="300" cy="64" r="26" fill="#FFF3CC"/>
+  <path d="M319 83l18 18" stroke-width="8"/>
+  <path d="M290 56a12 12 0 0 1 14-6" stroke-width="4"/>
+</svg>
