@@ -1,12 +1,13 @@
 ---
-// Hawan + حبّة: small animated characters in the corner of every page.
-// They bob and wave on their own, change their message every few seconds with a little trick, and can be hidden with ×.
+// Hawan + Capsy (the capsule): small animated characters in the corner of every page.
+// They bob and wave on their own and change their message every few seconds.
+// Tapping the capsule opens Capsy, the site assistant; tapping Hawan makes them do a trick.
 import Hawan from './Hawan.astro';
 import PillBuddy from './PillBuddy.astro';
 interface Props { path: string }
 const { path } = Astro.props;
 const lines: Record<string, string[]> = {
-  '/': ['أهلاً! أنا هاون، وهذي حبّة', 'دوّر على تجربة تشبه خطتك', 'جرّب تقرأ آخر مقال'],
+  '/': ['أهلاً! أنا هاون، وهذي Capsy', 'اضغط على الكبسولة واسألها!', 'دوّر على تجربة تشبه خطتك'],
   '/blog': ['دوّر على المقال اللي تبيه', 'جرّب تكتب: فارم دي'],
   '/category': ['تجارب حقيقية من طلاب', 'اختار المقال اللي يشبه خطتك'],
   '/experiences': ['تجارب حقيقية من طلاب', 'بريطانيا؟ أمريكا؟ اختار!'],
@@ -15,21 +16,21 @@ const lines: Record<string, string[]> = {
   '/policies': ['تأكد دايماً من النص الرسمي', 'ابحث برقم القرار'],
   '/consultations': ['احجز استشارتك'],
   '/about': ['هذي موضي، صاحبة الموقع'],
-  '/posts': ['قراءة ممتعة', 'المقالات ذات الصلة تحت'],
+  '/posts': ['قراءة ممتعة', 'عندك سؤال؟ اضغط على Capsy'],
 };
 const key = Object.keys(lines).filter((k) => k !== '/' && path.startsWith(k))[0] ?? (path === '/' ? '/' : '/blog');
-const msgs = lines[key];
+const msgs = [...lines[key], 'اضغط على الكبسولة واسأل Capsy'].filter((m, i, a) => a.indexOf(m) === i);
 ---
-<aside class="dock" aria-label="هاون وحبّة" data-dock hidden>
+<aside class="dock" aria-label="هاون و Capsy" data-dock hidden>
   <p class="dock-bubble" data-bubble aria-live="polite">{msgs[0]}
-    <button type="button" class="dock-close" data-close aria-label="تصغير هاون وحبّة"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <button type="button" class="dock-close" data-close aria-label="تصغير هاون و Capsy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
   </p>
-  <button type="button" class="dock-chars" data-chars data-msgs={JSON.stringify(msgs)} aria-label="رسالة جديدة من هاون">
-    <span class="dock-hawan"><Hawan size={76} animate={false} decorative /></span>
-    <PillBuddy class="dock-pill" />
-  </button>
+  <div class="dock-chars" data-chars data-msgs={JSON.stringify(msgs)}>
+    <button type="button" class="dock-hawan" data-hawan aria-label="رسالة جديدة من هاون"><Hawan size={76} animate={false} decorative /></button>
+    <button type="button" class="dock-capsy" data-open-capsy aria-label="اسأل Capsy، مساعد الموقع"><PillBuddy class="dock-pill" /></button>
+  </div>
 </aside>
-<button type="button" class="dock-show" data-show aria-label="إظهار هاون وحبّة" aria-expanded="false"><Hawan size={40} animate={false} decorative /></button>
+<button type="button" class="dock-show" data-show aria-label="إظهار هاون و Capsy" aria-expanded="false"><Hawan size={40} animate={false} decorative /></button>
 
 <script>
   const dock = document.querySelector<HTMLElement>('[data-dock]')!;
@@ -57,7 +58,7 @@ const msgs = lines[key];
   setOpen(!pref());
   close.addEventListener('click', () => { setOpen(false); save(true); show.focus(); });
   show.addEventListener('click', () => { setOpen(true); save(false); trick(); });
-  chars.addEventListener('click', trick);
+  dock.querySelector('[data-hawan]')!.addEventListener('click', trick);
   // every 5 seconds: next message and a different trick (not when reduced motion is requested)
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!calm) setInterval(() => { if (!dock.hidden && !document.hidden) trick(); }, 5000);

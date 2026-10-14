@@ -46,3 +46,12 @@ Set `experience: true` to also list the article under **تجارب واقعية*
 | `**كلمة**` | **bold** |
 | `- نقطة` | a bullet |
 | `[نص](https://...)` | a link |
+
+## 💊 Capsy, the site assistant
+
+Capsy (the pink capsule in the corner) answers visitors' questions using **only this site's content**: articles, experiences, studies, MoH decisions and resources. When something isn't on the site, it says so and shows the Instagram link so visitors can suggest it.
+
+- **Without an AI key** Capsy still works: it finds the closest pages by keywords.
+- **To turn on the AI answers**: create an API key at console.anthropic.com, then in Vercel open the project → **Settings → Environment Variables** and add `ANTHROPIC_API_KEY` with the key. Redeploy. Set a monthly spending limit in the Anthropic console.
+- Optional: `CAPSY_MODEL` to choose another Claude model (default `claude-haiku-5-5`).
+- New articles, studies and decisions are picked up automatically on the next deploy.

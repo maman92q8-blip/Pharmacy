@@ -1,0 +1,96 @@
+---
+// Capsy chat window. Opens when the capsule in the corner (or any [data-open-capsy] button) is pressed.
+import PillBuddy from './PillBuddy.astro';
+import { site } from '../data/site';
+const suggestions = ['أبي تجربة من لندن', 'لخّص لي دراسة من الكويت', 'شنو الفرق بين الفارم دي والبكالوريوس؟', 'آخر قرارات وزارة الصحة'];
+---
+<section class="capsy" data-capsy hidden aria-labelledby="capsy-title" role="dialog">
+  <header class="capsy-head">
+    <span class="capsy-avatar"><PillBuddy class="capsy-pill" /></span>
+    <div><h2 id="capsy-title">Capsy</h2><p>مساعد RXperiences</p></div>
+    <button type="button" class="icon-btn" data-capsy-close aria-label="إغلاق المحادثة"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </header>
+  <div class="capsy-log" data-capsy-log aria-live="polite">
+    <div class="msg bot"><p>هلا! أنا Capsy. اسألني عن تجارب الدراسة، أو ملخص دراسة، أو قرارات وزارة الصحة، وأدلّك على المكان بالموقع.</p></div>
+    <div class="capsy-suggest" data-capsy-suggest>
+      {suggestions.map((s) => <button type="button">{s}</button>)}
+    </div>
+  </div>
+  <form class="capsy-form" data-capsy-form>
+    <label for="capsy-input" class="sr">اكتب سؤالك لـ Capsy</label>
+    <input id="capsy-input" type="text" maxlength="400" autocomplete="off" enterkeyhint="send" placeholder="اكتب سؤالك…" required />
+    <button type="submit" aria-label="إرسال"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5"/><path d="m11 18-6-6 6-6"/></svg></button>
+  </form>
+  <p class="capsy-note">يجاوب من محتوى الموقع فقط، وما يعطي نصائح طبية.</p>
+  <template data-capsy-contact>
+    <a class="capsy-contact" href={site.social.instagram} target="_blank" rel="noopener">تواصل معنا وشاركنا رأيك</a>
+  </template>
+</section>
+
+<script>
+  const box = document.querySelector<HTMLElement>('[data-capsy]')!;
+  const log = box.querySelector<HTMLElement>('[data-capsy-log]')!;
+  const form = box.querySelector<HTMLFormElement>('[data-capsy-form]')!;
+  const input = box.querySelector<HTMLInputElement>('#capsy-input')!;
+  const suggest = box.querySelector<HTMLElement>('[data-capsy-suggest]')!;
+  const contactTpl = box.querySelector<HTMLTemplateElement>('[data-capsy-contact]')!;
+  const history: { role: 'user' | 'assistant'; content: string }[] = [];
+  let opener: HTMLElement | null = null;
+  let busy = false;
+
+  function open(from?: HTMLElement | null) {
+    opener = from ?? (document.activeElement as HTMLElement);
+    box.hidden = false; document.body.classList.add('capsy-open');
+    input.focus();
+  }
+  function close() { box.hidden = true; document.body.classList.remove('capsy-open'); opener?.focus(); }
+  document.addEventListener('capsy:open', (e) => open((e as CustomEvent).detail));
+  document.querySelectorAll<HTMLElement>('[data-open-capsy]').forEach((b) => b.addEventListener('click', () => open(b)));
+  box.querySelector('[data-capsy-close]')!.addEventListener('click', close);
+  box.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+
+  function bubble(who: 'user' | 'bot', text: string) {
+    const div = document.createElement('div'); div.className = `msg ${who}`;
+    const p = document.createElement('p'); p.textContent = text; div.append(p);
+    log.append(div); log.scrollTop = log.scrollHeight;
+    return div;
+  }
+  const safe = (href: string) => href.startsWith('/') || /^https:\/\//.test(href);
+
+  async function ask(q: string) {
+    if (busy || !q.trim()) return;
+    busy = true; suggest.remove();
+    bubble('user', q);
+    const wait = bubble('bot', 'لحظة…'); wait.classList.add('typing');
+    try {
+      const res = await fetch('/api/capsy', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ message: q, history, page: `${document.title} (${location.pathname})` }) });
+      const data = await res.json();
+      wait.remove();
+      const div = bubble('bot', data.reply || 'ما قدرت أجاوب الحين.');
+      if (Array.isArray(data.links) && data.links.length) {
+        const ul = document.createElement('ul'); ul.className = 'msg-links';
+        for (const l of data.links) {
+          if (!safe(l.href)) continue;
+          const li = document.createElement('li'); const a = document.createElement('a');
+          a.href = l.href; a.textContent = l.label;
+          if (l.external) { a.target = '_blank'; a.rel = 'noopener'; }
+          li.append(a); ul.append(li);
+        }
+        div.append(ul);
+      }
+      if (data.found === false) {
+        const p = document.createElement('p'); p.textContent = 'تقدر تتواصل معنا وتشارك رأيك والتجارب اللي تبي تشوفها بالموقع:';
+        div.append(p, contactTpl.content.cloneNode(true));
+      }
+      history.push({ role: 'user', content: q }, { role: 'assistant', content: data.reply || '' });
+    } catch {
+      wait.remove();
+      const div = bubble('bot', 'صار خطأ بالاتصال، جرّب مرة ثانية بعد شوي.');
+      div.append(contactTpl.content.cloneNode(true));
+    }
+    log.scrollTop = log.scrollHeight;
+    busy = false;
+  }
+  form.addEventListener('submit', (e) => { e.preventDefault(); const q = input.value; input.value = ''; ask(q); });
+  suggest.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => ask(b.textContent || '')));
+</script>

@@ -3,6 +3,7 @@ import { site } from '../data/site';
 import Icon from '../components/Icon.astro';
 import Hawan from '../components/Hawan.astro';
 import MascotDock from '../components/MascotDock.astro';
+import Capsy from '../components/Capsy.astro';
 import '../styles/global.css';
 
 interface Props { title?: string; description?: string; image?: string }
@@ -87,6 +88,7 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/') 
   <main id="main"><slot /></main>
 
   <MascotDock path={path} />
+  <Capsy />
 
   <footer class="site-footer">
     <div class="wrap footer-grid">
