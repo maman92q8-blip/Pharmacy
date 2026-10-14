@@ -6,7 +6,7 @@ export const site = {
   author: 'موضي أمان',
   description: 'تجارب واقعية لصيادلة وطلبة صيدلة من الكويت وحول العالم، ومقالات عن الدراسة والعمل في الصيدلة.',
   social: {
-    instagram: 'https://instagram.com/moudhi_aman',
+    instagram: 'https://instagram.com/moudhi_ea',
     youtube: 'https://youtu.be/b53vCeUeXEE',
     twitter: 'https://twitter.com/m_e_aman',
   },
