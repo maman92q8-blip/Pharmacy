@@ -1,0 +1,62 @@
+---
+// Hawan + حبّة: small animated characters fixed on the side of every page.
+import Hawan from './Hawan.astro';
+interface Props { path: string }
+const { path } = Astro.props;
+const lines: Record<string, string[]> = {
+  '/': ['أهلاً! أنا هاون 👋', 'وأنا حبّة! 💊', 'جرّب تقرأ آخر مقال'],
+  '/blog': ['دوّر على المقال اللي تبيه 🔍', 'جرّب تكتب: فارم دي'],
+  '/experiences': ['تجارب حقيقية من طلاب ✈️', 'بريطانيا؟ أمريكا؟ اختار!'],
+  '/library': ['أبحاث من الكويت والخليج 🇰🇼', 'اضغط على الدراسة تقراها'],
+  '/resources': ['دورات مجانية! 🎓', 'شفت قنوات اليوتيوب؟'],
+  '/policies': ['تأكد دايماً من النص الرسمي ✔️', 'ابحث برقم القرار'],
+  '/consultations': ['احجز استشارتك 📅'],
+  '/posts': ['قراءة ممتعة 📖', 'لا تنسى المقالات ذات الصلة تحت'],
+};
+const key = Object.keys(lines).filter((k) => k !== '/' && path.startsWith(k))[0] ?? (path === '/' ? '/' : '/blog');
+const msgs = lines[key];
+---
+<aside class="dock" aria-label="هاون وحبّة" data-dock>
+  <p class="dock-bubble" data-bubble aria-live="polite">{msgs[0]}</p>
+  <button type="button" class="dock-close" data-close aria-label="إخفاء الشخصيات">×</button>
+  <div class="dock-chars" data-msgs={JSON.stringify(msgs)}>
+    <span class="dock-hawan"><Hawan size={84} /></span>
+    <svg class="dock-pill" viewBox="0 0 120 170" aria-hidden="true">
+      <path class="arm" d="M98 82l18-22" stroke="#1E2A4A" stroke-width="7" stroke-linecap="round"/>
+      <path d="M22 82l-16 18" stroke="#1E2A4A" stroke-width="7" stroke-linecap="round"/>
+      <path d="M46 150v14M74 150v14" stroke="#1E2A4A" stroke-width="7" stroke-linecap="round"/>
+      <path d="M22 80V50a38 38 0 0 1 76 0v30z" fill="#F48FB1"/>
+      <path d="M22 80v30a38 38 0 0 0 76 0V80z" fill="#FFFFFF"/>
+      <rect x="22" y="12" width="76" height="136" rx="38" fill="none" stroke="#1E2A4A" stroke-width="6"/>
+      <path d="M22 80h76" stroke="#1E2A4A" stroke-width="6"/>
+      <circle class="blink" cx="48" cy="58" r="6" fill="#1E2A4A"/><circle class="blink" cx="72" cy="58" r="6" fill="#1E2A4A"/>
+      <path d="M50 70q10 9 20 0" fill="none" stroke="#1E2A4A" stroke-width="4.5" stroke-linecap="round"/>
+      <ellipse cx="38" cy="68" rx="5" ry="3" fill="#E05A8A"/><ellipse cx="82" cy="68" rx="5" ry="3" fill="#E05A8A"/>
+    </svg>
+  </div>
+</aside>
+<button type="button" class="dock-show" data-show hidden aria-label="إظهار هاون وحبّة">💊</button>
+
+<script>
+  const dock = document.querySelector<HTMLElement>('[data-dock]')!;
+  const show = document.querySelector<HTMLButtonElement>('[data-show]')!;
+  const bubble = dock.querySelector<HTMLElement>('[data-bubble]')!;
+  const chars = dock.querySelector<HTMLElement>('.dock-chars')!;
+  const msgs: string[] = JSON.parse(chars.dataset.msgs || '[]');
+  let i = 0;
+  const hidden = (() => { try { return localStorage.getItem('dock-hidden') === '1'; } catch { return false; } })();
+  const setHidden = (h: boolean) => { dock.hidden = h; show.hidden = !h; try { localStorage.setItem('dock-hidden', h ? '1' : '0'); } catch {} };
+  setHidden(hidden);
+  dock.querySelector('[data-close]')!.addEventListener('click', () => setHidden(true));
+  show.addEventListener('click', () => setHidden(false));
+  // cycle messages + do a little trick each time
+  const tricks = ['trick-jump', 'trick-spin', 'trick-wiggle'];
+  setInterval(() => {
+    i = (i + 1) % msgs.length;
+    bubble.classList.remove('pop'); void bubble.offsetWidth; bubble.textContent = msgs[i]; bubble.classList.add('pop');
+    const t = tricks[i % tricks.length];
+    chars.classList.add(t); setTimeout(() => chars.classList.remove(t), 1200);
+  }, 5000);
+  // tap them for a trick
+  chars.addEventListener('click', () => { chars.classList.add('trick-jump'); setTimeout(() => chars.classList.remove('trick-jump'), 1200); });
+</script>

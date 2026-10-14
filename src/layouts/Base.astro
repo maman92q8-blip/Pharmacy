@@ -2,6 +2,7 @@
 import { site } from '../data/site';
 import Icon from '../components/Icon.astro';
 import Hawan from '../components/Hawan.astro';
+import MascotDock from '../components/MascotDock.astro';
 import '../styles/global.css';
 
 interface Props { title?: string; description?: string; image?: string }
@@ -58,6 +59,8 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
   </header>
 
   <main id="main"><slot /></main>
+
+  <MascotDock path={path} />
 
   <!-- Bottom bar on phones: one tap to every section -->
   <nav class="tabbar" aria-label="تنقل سريع">

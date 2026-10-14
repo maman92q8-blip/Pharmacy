@@ -233,7 +233,7 @@ a.policy-banner:hover { background: #0e4553; }
 .hero { background: var(--bg) !important; color: var(--navy); border-bottom: 2px solid var(--navy); overflow: hidden; }
 .hero::before { display: none; }
 .hero .wrap { display: grid; gap: 24px; align-items: center; grid-template-columns: 1fr; padding-block: 48px 56px; position: relative; }
-@media (min-width: 860px) { .hero .wrap { grid-template-columns: 1.2fr 1fr; } }
+
 .hero h1 { color: var(--navy); }
 .hero h1 mark { background: var(--pink); color: var(--navy); padding: 0 .2em; border-radius: 14px; border: 3px solid var(--navy); }
 .hero .en { color: #c43c6e; }
@@ -266,3 +266,28 @@ a.policy-banner:hover { background: #0e4553; }
 .chip { background: var(--teal-50); color: var(--teal-600); }
 .page-head { background: linear-gradient(180deg, #fde6ef, var(--bg)); border-bottom: 2px solid var(--navy); }
 .site-footer { border-top: 2px solid var(--navy); }
+
+/* Mascot dock: Hawan + Habba on the side of every page */
+.dock { position: fixed; z-index: 70; left: 16px; bottom: 16px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; pointer-events: none; }
+.dock[hidden] { display: none; }
+.dock > * { pointer-events: auto; }
+.dock-bubble { margin: 0; max-width: 210px; background: #fff; border: 2px solid var(--navy); border-radius: 16px 16px 16px 4px; padding: 7px 12px; font-size: 14.5px; font-weight: 700; line-height: 1.5; box-shadow: 3px 3px 0 var(--pink); }
+.dock-bubble.pop { animation: pop .35s ease-out; }
+.dock-close { position: absolute; top: -8px; right: -8px; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--navy); background: #fff; font: inherit; font-weight: 800; line-height: 1; cursor: pointer; color: var(--navy); }
+.dock-chars { display: flex; align-items: flex-end; gap: 2px; cursor: pointer; }
+.dock-hawan { display: block; width: 84px; animation: bob 2.6s ease-in-out infinite; transform-origin: 50% 100%; }
+.dock-pill { width: 40px; height: 57px; animation: hop 1.6s ease-in-out infinite; transform-origin: 50% 100%; }
+.dock-pill .arm { transform-box: fill-box; transform-origin: 0% 100%; animation: wave 1s ease-in-out infinite; }
+.dock-show { position: fixed; z-index: 70; left: 16px; bottom: 16px; width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--navy); background: var(--amber); font-size: 22px; cursor: pointer; box-shadow: 3px 3px 0 var(--navy); }
+.dock-show[hidden] { display: none; }
+@keyframes hop { 0%,100% { transform: translateY(0) rotate(-6deg); } 40% { transform: translateY(-14px) rotate(8deg); } 55% { transform: translateY(-14px) rotate(8deg); } }
+@keyframes pop { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes jump { 0%,100% { transform: translateY(0); } 35% { transform: translateY(-34px); } 60% { transform: translateY(0) scaleY(.9); } }
+@keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes wiggle { 0%,100% { transform: rotate(0); } 20%,60% { transform: rotate(-12deg); } 40%,80% { transform: rotate(12deg); } }
+.trick-jump .dock-hawan { animation: jump 1s ease-in-out; }
+.trick-jump .dock-pill { animation: jump 1s ease-in-out .15s; }
+.trick-spin .dock-pill { animation: spin .9s ease-in-out; }
+.trick-spin .dock-hawan { animation: wiggle 1s ease-in-out; }
+.trick-wiggle .dock-hawan, .trick-wiggle .dock-pill { animation: wiggle 1s ease-in-out; }
+@media (max-width: 1239px) { .dock, .dock-show { bottom: 84px; left: 10px; } .dock-hawan { width: 60px; } .dock-pill { width: 30px; height: 43px; } .dock-bubble { font-size: 13px; max-width: 170px; } }
