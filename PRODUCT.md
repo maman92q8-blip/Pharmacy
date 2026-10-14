@@ -14,7 +14,7 @@ Secondary: practising pharmacists in Kuwait looking up Ministry of Health polici
 RXperiences (كل ما يتعلق بالصيدلة) is Moudhi Aman's pharmacy publication: first-hand study-abroad and career experiences, explanatory articles, a curated library of published Kuwait/Gulf pharmacy research, a directory of Kuwaiti MoH pharmacy laws and decisions, free courses and references, and paid one-to-one consultations. Success: a reader finds an experience that matches their situation, trusts it, reads to the end, and either explores further or books a consultation.
 
 ## Positioning
-Real experiences from Kuwaiti and Gulf pharmacists and students, written in a warm Kuwaiti voice by a practising clinical pharmacist (BPharm, MSc Clinical Pharmacy UCL, BCPS), alongside a Kuwait-specific policy directory and research library that general pharmacy sites do not have.
+Real experiences from Kuwaiti and Gulf pharmacists and students, written in a warm Kuwaiti voice by a practising clinical pharmacist (BPharm, MSc Clinical Pharmacy UCL, BCPS, doctorate in pharmacy), alongside a Kuwait-specific policy directory and research library that general pharmacy sites do not have.
 
 ## Operating Context
 - Content is edited by a non-developer directly on GitHub (Markdown posts, YAML policies/library/resources); the site redeploys on Vercel. Editing must stay that simple.

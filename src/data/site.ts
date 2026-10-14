@@ -4,7 +4,7 @@ export const site = {
   tagline: 'كل ما يتعلق بالصيدلة',
   taglineEn: 'All about Pharmacy',
   author: 'موضي أمان',
-  description: 'تجارب واقعية لصيادلة وطلبة صيدلة من الكويت وحول العالم، ومقالات عن الدراسة والعمل في الصيدلة.',
+  description: 'تجارب واقعية لصيادلة وطلبة صيدلة من الكويت والخليج، ومقالات عن الدراسة والعمل في الصيدلة.',
   social: {
     instagram: 'https://instagram.com/moudhi_aman',
     youtube: 'https://youtu.be/b53vCeUeXEE',

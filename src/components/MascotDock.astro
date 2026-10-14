@@ -1,6 +1,6 @@
 ---
-// Hawan + حبّة: small characters in the corner. They stay still and only move when tapped.
-// Wide screens: shown open in the page margin. Smaller screens: folded into one small button so they never cover text.
+// Hawan + حبّة: small animated characters in the corner of every page.
+// They bob and wave on their own, change their message every few seconds with a little trick, and can be hidden with ×.
 import Hawan from './Hawan.astro';
 import PillBuddy from './PillBuddy.astro';
 interface Props { path: string }
@@ -38,7 +38,6 @@ const msgs = lines[key];
   const close = dock.querySelector<HTMLButtonElement>('[data-close]')!;
   const chars = dock.querySelector<HTMLElement>('[data-chars]')!;
   const msgs: string[] = JSON.parse(chars.dataset.msgs || '[]');
-  const wide = matchMedia('(min-width: 1480px)');
   const pref = () => { try { return localStorage.getItem('dock-hidden') === '1'; } catch { return false; } };
   const save = (v: boolean) => { try { localStorage.setItem('dock-hidden', v ? '1' : '0'); } catch {} };
   let i = 0;
@@ -50,12 +49,16 @@ const msgs = lines[key];
     i = (i + 1) % msgs.length;
     textNode.textContent = msgs[i];
     bubble.classList.remove('pop'); void bubble.offsetWidth; bubble.classList.add('pop');
-    chars.classList.remove('jump'); void chars.offsetWidth; chars.classList.add('jump');
+    const t = tricks[i % tricks.length];
+    chars.classList.remove(...tricks); void chars.offsetWidth; chars.classList.add(t);
+    setTimeout(() => chars.classList.remove(t), 1100);
   }
-  setOpen(wide.matches && !pref());
-  wide.addEventListener('change', () => setOpen(wide.matches && !pref()));
-  close.addEventListener('click', () => { setOpen(false); if (wide.matches) save(true); show.focus(); });
-  show.addEventListener('click', () => { setOpen(true); if (wide.matches) save(false); chars.classList.add('jump'); });
+  const tricks = ['jump', 'spin', 'wiggle'];
+  setOpen(!pref());
+  close.addEventListener('click', () => { setOpen(false); save(true); show.focus(); });
+  show.addEventListener('click', () => { setOpen(true); save(false); trick(); });
   chars.addEventListener('click', trick);
-  chars.addEventListener('animationend', () => chars.classList.remove('jump'));
+  // every 5 seconds: next message and a different trick (not when reduced motion is requested)
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!calm) setInterval(() => { if (!dock.hidden && !document.hidden) trick(); }, 5000);
 </script>
