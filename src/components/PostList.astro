@@ -1,0 +1,52 @@
+---
+// Searchable, filterable list of posts
+import PostCard from './PostCard.astro';
+import Icon from './Icon.astro';
+import { categories } from '../data/site';
+import type { Post } from '../data/posts';
+interface Props { posts: Post[]; filters?: boolean }
+const { posts, filters = true } = Astro.props;
+const used = Object.keys(categories).filter((c) => posts.some((p) => p.data.categories.includes(c)));
+---
+<div class="toolbar" id="search">
+  <label class="search">
+    <span class="sr" hidden>ابحث في المقالات</span>
+    <Icon name="search" />
+    <input type="search" placeholder="ابحث في المقالات… مثلاً: فارم دي، بريطانيا، ماجستير" data-search />
+  </label>
+  {filters && (
+    <div class="filters" role="group" aria-label="التصنيفات">
+      <button type="button" aria-pressed="true" data-filter="">الكل</button>
+      <button type="button" aria-pressed="false" data-filter="experience">تجارب واقعية</button>
+      {used.map((c) => <button type="button" aria-pressed="false" data-filter={c}>{categories[c].name}</button>)}
+    </div>
+  )}
+</div>
+<div class="grid" data-list>{posts.map((p) => <PostCard post={p} />)}</div>
+<p class="empty" data-empty hidden>لا توجد نتائج. جرّب كلمة أخرى.</p>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('[data-search]')!;
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-list] .card')];
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+  const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+  let cat = '';
+  const norm = (s: string) => s.toLowerCase().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي');
+  function apply() {
+    const q = norm(input.value.trim());
+    let shown = 0;
+    for (const c of cards) {
+      const ok = (!cat || c.dataset.cats!.split(' ').includes(cat)) &&
+        (!q || norm(c.dataset.title + ' ' + c.dataset.text).includes(q));
+      c.hidden = !ok; if (ok) shown++;
+    }
+    empty.hidden = shown > 0;
+  }
+  input.addEventListener('input', apply);
+  buttons.forEach((b) => b.addEventListener('click', () => {
+    cat = b.dataset.filter!;
+    buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    apply();
+  }));
+  if (location.hash === '#search') input.focus();
+</script>

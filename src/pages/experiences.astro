@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import { categories } from '../data/site';
+import { getPosts } from '../data/posts';
+const posts = (await getPosts()).filter((p) => p.data.experience);
+const regions = ['uk-ireland', 'usa-canada', 'arab-countries'];
+---
+<Base title="تجارب واقعية">
+  <div class="page-head"><div class="wrap"><h1>تجارب واقعية</h1><p>تجارب طلاب وصيادلة درسوا في بريطانيا وإيرلندا وأمريكا والدول العربية.</p></div></div>
+  <section class="section" style="padding-top:28px">
+    <div class="wrap">
+      <div class="regions" style="margin-bottom:36px">
+        {regions.map((r) => (
+          <a class="region" href={`/category/${r}`}>
+            <img src={categories[r].image} alt="" loading="lazy" />
+            <div><strong>{categories[r].name}</strong><small>{categories[r].nameEn}</small></div>
+          </a>
+        ))}
+      </div>
+      <PostList posts={posts} />
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import Icon from '../../components/Icon.astro';
+import { render } from 'astro:content';
+import { categories, site } from '../../data/site';
+import { getPosts, formatDate, readingTime } from '../../data/posts';
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const { title, image, date, excerpt } = post.data;
+const cats = post.data.categories.filter((c) => categories[c]);
+const related = posts.filter((p) => p.id !== post.id && p.data.categories.some((c) => cats.includes(c))).slice(0, 3);
+const more = related.length ? related : posts.filter((p) => p.id !== post.id).slice(0, 3);
+---
+<Base title={title} description={excerpt} image={image}>
+  <article>
+    <header class="wrap article-head" style="max-width:840px">
+      <a href="/blog" class="back"><Icon name="arrow" size={18} flip /> المدونة</a>
+      <h1>{title}</h1>
+      <div class="meta">
+        {cats.map((c) => <a class="chip" href={`/category/${c}`}>{categories[c].name}</a>)}
+        <span><Icon name="calendar" size={15} />{formatDate(date)}</span>
+        <span><Icon name="clock" size={15} />{readingTime(post.body)} دقائق قراءة</span>
+      </div>
+    </header>
+    <div class="wrap" style="max-width:840px">
+      {image && <figure class="article-cover" style="margin-inline:0"><img src={image} alt="" /></figure>}
+      <div class="prose"><Content /></div>
+      <div class="cta">
+        <p>عندك سؤال عن دراستك أو مسارك المهني؟</p>
+        <a href={site.booking} class="btn btn-teal"><Icon name="chat" /> احجز استشارة</a>
+      </div>
+    </div>
+  </article>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><h2>مقالات ذات صلة</h2></div>
+      <div class="grid">{more.map((p) => <PostCard post={p} />)}</div>
+    </div>
+  </section>
+</Base>

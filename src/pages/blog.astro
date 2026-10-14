@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../data/posts';
+const posts = await getPosts();
+---
+<Base title="مواضيع المدونة">
+  <div class="page-head"><div class="wrap"><h1>مواضيع المدونة</h1><p>{posts.length} مقالاً عن دراسة الصيدلة والعمل فيها والتخصصات.</p></div></div>
+  <section class="section" style="padding-top:28px"><div class="wrap"><PostList posts={posts} /></div></section>
+</Base>

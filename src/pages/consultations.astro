@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+---
+<Base title="الاستشارات و الدورات">
+  <div class="page-head"><div class="wrap"><h1>الاستشارات و الدورات</h1><p>Consultations</p></div></div>
+  <section class="section" style="padding-top:32px">
+    <div class="wrap" style="max-width:760px">
+      <div class="policy-banner">
+        <div class="badge"><Icon name="calendar" size={30} /></div>
+        <div>
+          <h2>احجز استشارتك</h2>
+          <p>لحجز الاستشارات عن دراسة الصيدلة، الابتعاث، أو مسارك المهني، اختر الموعد المناسب لك.</p>
+          <a href={site.booking} class="btn btn-primary">احجز الآن <Icon name="arrow" size={18} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

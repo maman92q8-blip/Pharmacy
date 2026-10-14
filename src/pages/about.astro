@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+---
+<Base title="من أنا">
+  <div class="page-head"><div class="wrap"><h1>من أنا؟</h1></div></div>
+  <section class="section" style="padding-top:32px">
+    <div class="wrap about">
+      <img src="/images/2022-06-logo334.png" alt={site.author} style="object-fit:contain;background:#fff;padding:24px" />
+      <div>
+        <p style="font-size:20px">إسمي موضي و محبه للعطاء. تخرجت من كليه الصيدله بدرجه البكالريوس ‎(BPharm).</p>
+        <ul class="creds">
+          <li>بدأت العمل في وزارة الصحة في الكويت</li>
+          <li>ماجستير الصيدلة الإكلينيكية من جامعة كلية لندن ‎(UCL)</li>
+          <li>حاصلة على البورد الأمريكي في العلاجيات ‎(BCPS)</li>
+        </ul>
+        <div class="btns">
+          <a href={site.booking} class="btn btn-teal"><Icon name="chat" /> احجز استشارة</a>
+          <a href={site.social.instagram} class="btn btn-primary"><Icon name="instagram" /> Instagram</a>
+          <a href={site.social.youtube} class="btn btn-primary"><Icon name="youtube" /> YouTube</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

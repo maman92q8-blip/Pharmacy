@@ -1,0 +1,24 @@
+---
+import Icon from './Icon.astro';
+import { categories } from '../data/site';
+import { formatDate, readingTime, type Post } from '../data/posts';
+interface Props { post: Post }
+const { post } = Astro.props;
+const { title, image, excerpt, date } = post.data;
+const cat = post.data.categories.map((c) => categories[c]).find(Boolean);
+const url = `/posts/${post.id}`;
+---
+<article class="card" data-title={title} data-text={excerpt ?? ''} data-cats={post.data.categories.join(' ') + (post.data.experience ? ' experience' : '')}>
+  <a href={url} class:list={['cover', { noimg: !image }]} tabindex="-1" aria-hidden="true">
+    {image ? <img src={image} alt="" loading="lazy" /> : <span>℞</span>}
+  </a>
+  <div class="body">
+    {cat && <span><span class="chip">{cat.name}</span></span>}
+    <h3><a href={url}>{title}</a></h3>
+    {excerpt && <p>{excerpt}</p>}
+    <div class="meta" style="margin-top:auto">
+      <span><Icon name="calendar" size={15} />{formatDate(date)}</span>
+      <span><Icon name="clock" size={15} />{readingTime(post.body)} دقائق قراءة</span>
+    </div>
+  </div>
+</article>

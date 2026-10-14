@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { categories } from '../../data/site';
+import { getPosts } from '../../data/posts';
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return Object.keys(categories).map((slug) => ({ params: { slug }, props: { posts: posts.filter((p) => p.data.categories.includes(slug)) } }));
+}
+const { slug } = Astro.params;
+const { posts } = Astro.props;
+const cat = categories[slug!];
+---
+<Base title={cat.name}>
+  <div class="page-head"><div class="wrap"><h1>{cat.name}</h1><p>{posts.length} {posts.length === 1 ? 'مقال' : 'مقالات'}</p></div></div>
+  <section class="section" style="padding-top:28px"><div class="wrap"><PostList posts={posts} filters={false} /></div></section>
+</Base>

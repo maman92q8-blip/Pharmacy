@@ -1,0 +1,93 @@
+---
+import { site } from '../data/site';
+import Icon from '../components/Icon.astro';
+import '../styles/global.css';
+
+interface Props { title?: string; description?: string; image?: string }
+const { title, description = site.description, image } = Astro.props;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} – ${site.tagline}`;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const nav = [
+  { href: '/', label: 'الرئيسية', icon: 'home' },
+  { href: '/blog', label: 'المدونة', icon: 'book' },
+  { href: '/experiences', label: 'تجارب واقعية', icon: 'globe' },
+  { href: '/policies', label: 'سياسات وزارة الصحة', icon: 'shield' },
+  { href: '/consultations', label: 'الاستشارات', icon: 'chat' },
+  { href: '/about', label: 'من أنا', icon: 'user' },
+];
+const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+  <meta name="theme-color" content="#0b3a46" />
+  <link rel="icon" href="/images/2022-05-FavIcon-1.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <a class="skip" href="#main">تخطَّ إلى المحتوى</a>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a href="/" class="brand" aria-label={site.name}>
+        <span class="brand-mark" aria-hidden="true">℞</span>
+        <span class="brand-text"><b>RX</b>periences</span>
+      </a>
+      <nav class="main-nav" aria-label="القائمة الرئيسية">
+        {nav.map((n) => (
+          <a href={n.href} class:list={['nav-link', { active: active(n.href), policy: n.icon === 'shield' }]}>
+            <Icon name={n.icon} />
+            <span>{n.label}</span>
+          </a>
+        ))}
+      </nav>
+      <a href="/blog#search" class="icon-btn" aria-label="بحث"><Icon name="search" /></a>
+    </div>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <!-- Bottom bar on phones: one tap to every section -->
+  <nav class="tabbar" aria-label="تنقل سريع">
+    {nav.slice(0, 5).map((n) => (
+      <a href={n.href} class:list={{ active: active(n.href) }}>
+        <Icon name={n.icon} />
+        <span>{n.label === 'سياسات وزارة الصحة' ? 'السياسات' : n.label}</span>
+      </a>
+    ))}
+  </nav>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <a href="/" class="brand light"><span class="brand-mark" aria-hidden="true">℞</span><span class="brand-text"><b>RX</b>periences</span></a>
+        <p>{site.description}</p>
+      </div>
+      <div>
+        <h3>روابط</h3>
+        <ul>
+          {nav.slice(1).map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <h3>تابعنا</h3>
+        <div class="social">
+          <a href={site.social.instagram} aria-label="Instagram"><Icon name="instagram" /></a>
+          <a href={site.social.youtube} aria-label="YouTube"><Icon name="youtube" /></a>
+          <a href={site.social.twitter} aria-label="X / Twitter"><Icon name="x" /></a>
+        </div>
+      </div>
+    </div>
+    <p class="wrap copy">© {new Date().getFullYear()} {site.author} – {site.name}</p>
+  </footer>
+</body>
+</html>

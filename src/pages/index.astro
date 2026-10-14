@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import Icon from '../components/Icon.astro';
+import { site, categories } from '../data/site';
+import { getPosts } from '../data/posts';
+const posts = (await getPosts()).slice(0, 6);
+const regions = ['uk-ireland', 'usa-canada', 'arab-countries'];
+---
+<Base>
+  <section class="hero" style="background-image:url('/images/2022-05-pharma.jpg')">
+    <div class="wrap">
+      <h1>{site.tagline}</h1>
+      <p class="en">{site.taglineEn}</p>
+      <p class="lead">تجارب حقيقية لصيادلة وطلبة صيدلة في الكويت وحول العالم، لتساعدك تختار تخصصك وجامعتك وطريقك المهني.</p>
+      <div class="btns">
+        <a href="/blog" class="btn btn-primary"><Icon name="book" /> اقرأ المقالات</a>
+        <a href="/experiences" class="btn btn-ghost"><Icon name="globe" /> تجارب واقعية</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div><h2>أحدث المقالات</h2><p>جديد المواضيع المتعلقة بالصيدلة</p></div>
+        <a href="/blog" class="more">كل المقالات <Icon name="arrow" size={18} /></a>
+      </div>
+      <div class="grid">{posts.map((p) => <PostCard post={p} />)}</div>
+    </div>
+  </section>
+
+  <section class="section" style="background:#fff;border-block:1px solid var(--line)">
+    <div class="wrap">
+      <div class="section-head">
+        <div><h2>تجارب واقعية</h2><p>تجارب طلاب درسوا الصيدلة في دول مختلفة</p></div>
+        <a href="/experiences" class="more">كل التجارب <Icon name="arrow" size={18} /></a>
+      </div>
+      <div class="regions">
+        {regions.map((r) => (
+          <a class="region" href={`/category/${r}`}>
+            <img src={categories[r].image} alt="" loading="lazy" />
+            <div><strong>{categories[r].name}</strong><small>{categories[r].nameEn}</small></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="policy-banner">
+        <div class="badge"><Icon name="shield" size={32} /></div>
+        <div>
+          <h2>سياسات وقرارات وزارة الصحة الكويتية</h2>
+          <p>القوانين والقرارات الوزارية الخاصة بالصيدلة وتراخيص المهنة والأدوية في مكان واحد.</p>
+          <a href="/policies" class="btn btn-primary">تصفح السياسات <Icon name="arrow" size={18} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta" style="max-width:none;margin:0">
+        <p>تفقد قناتنا على اليوتيوب، أو احجز استشارة خاصة</p>
+        <div class="btns">
+          <a href={site.social.youtube} class="btn btn-teal"><Icon name="youtube" /> YouTube</a>
+          <a href="/consultations" class="btn btn-primary"><Icon name="chat" /> الاستشارات</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,9 @@
+title: "قرار وزاري رقم ... لسنة ... بشأن ..."
+title_en: "Ministerial Decision No. ... of ... — topic"
+category: licensing   # laws | licensing | pharmacies | medicines | official
+year: 2026
+number: "123/2026"
+date: 2026-10-01      # optional – delete this line if you don't know the exact date
+summary: "ملخص قصير للقرار."
+url: "https://..."
+source: "اسم المصدر"
