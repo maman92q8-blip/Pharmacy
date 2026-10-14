@@ -1,18 +1,18 @@
 /* ✏️ Change the site's colours here */
 :root {
-  --teal: #6b4fa3;        /* main brand colour: Hawan purple (buttons, links) */
-  --teal-600: #553a8c;
-  --teal-50: #efe6fb;     /* light lilac */
+  --teal: #1e2a4a;        /* main brand colour: ink navy (buttons) */
+  --teal-600: #c43c6e;    /* deep pink: links, active items */
+  --teal-50: #fde6ef;     /* light pink: chips, active backgrounds */
   --navy: #1e2a4a;        /* ink navy: headings, outlines, footer */
   --amber: #f7c948;       /* sunny yellow highlight */
   --amber-50: #fff6d9;
   --pink: #f48fb1;
-  --lilac: #c9b3ec;
+  --lilac: #8e9bc0;
   --slate: #8e9bc0;
   --ink: #1e2a4a;
   --muted: #555b75;
-  --line: #e3d8f3;
-  --bg: #f7f2fd;
+  --line: #ece2d6;
+  --bg: #fbf8f4;
   --card: #ffffff;
   --radius: 20px;
   --shadow: 4px 4px 0 var(--navy);
@@ -199,12 +199,12 @@ h1, h2, h3 { color: var(--navy); line-height: 1.35; font-weight: 800; margin: 0 
 a.policy-banner:hover { background: #0e4553; }
 
 /* Library */
-.lib-hero { background: linear-gradient(160deg, #efe6fb 0%, #f6faf9 70%); border-bottom: 1px solid var(--line); }
+.lib-hero { background: linear-gradient(160deg, #fde6ef 0%, var(--bg) 70%); border-bottom: 1px solid var(--line); }
 .lib-hero-grid { display: grid; gap: 28px; align-items: center; padding-block: 40px; grid-template-columns: 1fr; }
 @media (min-width: 860px) { .lib-hero-grid { grid-template-columns: 1.1fr 1fr; padding-block: 56px; } }
 .lib-hero h1 { font-size: clamp(30px, 5vw, 46px); margin: 10px 0; }
 .lib-hero p { color: var(--muted); max-width: 540px; margin: 0 0 18px; }
-.eyebrow { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; color: #6b4fa3; background: #fff; border: 1px solid #e3d6f5; padding: 4px 12px; border-radius: 99px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; color: #c43c6e; background: #fff; border: 2px solid var(--navy); padding: 4px 12px; border-radius: 99px; }
 .lib-stats { display: flex; gap: 12px; flex-wrap: wrap; }
 .lib-stats span { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 8px 14px; font-size: 15px; }
 .lib-stats b { color: var(--teal-600); font-size: 20px; margin-inline-end: 4px; }
@@ -218,7 +218,7 @@ a.policy-banner:hover { background: #0e4553; }
 .study { display: flex; flex-direction: column; gap: 8px; background: #fff; border: 2px solid var(--navy); border-radius: 16px; padding: 18px; text-decoration: none; color: var(--ink); box-shadow: var(--shadow); transition: transform .15s, border-color .15s; }
 .study:hover { transform: translate(-2px,-3px); box-shadow: 7px 7px 0 var(--lilac); }
 .study-tags { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.tag.soft { background: #f1eafb; color: #6b4fa3; }
+.tag.soft { background: var(--amber-50); color: #8a5a00; }
 .study .year { margin-inline-start: auto; font-weight: 700; font-size: 14px; color: var(--muted); }
 .study h3 { font-size: 16.5px; line-height: 1.5; margin: 4px 0 0; text-align: left; color: var(--navy); }
 .study .src { margin: 0; font-size: 14px; color: var(--muted); text-align: left; }
@@ -236,9 +236,9 @@ a.policy-banner:hover { background: #0e4553; }
 @media (min-width: 860px) { .hero .wrap { grid-template-columns: 1.2fr 1fr; } }
 .hero h1 { color: var(--navy); }
 .hero h1 mark { background: var(--pink); color: var(--navy); padding: 0 .2em; border-radius: 14px; border: 3px solid var(--navy); }
-.hero .en { color: var(--teal); }
+.hero .en { color: #c43c6e; }
 .hero p.lead { color: var(--muted); }
-.hero-art { justify-self: center; width: min(380px, 80vw); aspect-ratio: 1; background: var(--lilac); border: 3px solid var(--navy); border-radius: 48% 52% 46% 54% / 52% 44% 56% 48%; display: grid; place-items: center; }
+.hero-art { justify-self: center; width: min(380px, 80vw); aspect-ratio: 1; background: #ffe7a3; border: 3px solid var(--navy); border-radius: 48% 52% 46% 54% / 52% 44% 56% 48%; display: grid; place-items: center; }
 .hello { align-self: start; justify-self: start; display: inline-block; font-weight: 700; font-size: 15px; background: #fff; border: 2px solid var(--navy); border-radius: 99px; padding: 4px 14px; margin-bottom: 12px; }
 .pill { position: absolute; pointer-events: none; }
 @media (max-width: 859px) { .pill { display: none; } }
@@ -248,12 +248,21 @@ a.policy-banner:hover { background: #0e4553; }
 .pill:nth-of-type(2) { animation-duration: 5.5s; animation-delay: -2s; }
 .pill:nth-of-type(3) { animation-duration: 3.8s; animation-delay: -1s; }
 .stir { transform-origin: 150px 150px; animation: stir 2.4s ease-in-out infinite; }
-@media (prefers-reduced-motion: reduce) { .pill, .stir { animation: none; } }
+@keyframes bob { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
+@keyframes blink { 0%,90%,100% { transform: scaleY(1); } 94% { transform: scaleY(.1); } }
+@keyframes bounce { 0%,100% { transform: translateY(0) rotate(-14deg); } 45% { transform: translateY(-26px) rotate(10deg); } 60% { transform: translateY(-26px) rotate(10deg); } }
+@keyframes wave { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-28deg); } }
+.hawan-body { transform-box: view-box; transform-origin: 150px 300px; animation: bob 2.6s ease-in-out infinite; }
+.blink { transform-box: fill-box; transform-origin: center; animation: blink 4s infinite; }
+.hero-art { position: relative; }
+.buddy { position: absolute; width: 34%; bottom: 12%; left: 4%; animation: bounce 1.8s ease-in-out infinite; }
+.buddy .arm { transform-box: fill-box; transform-origin: 0% 100%; animation: wave 1s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .hawan-body, .buddy, .pill, .stir { animation-duration: 6s; } }
 .site-header { border-bottom: 2px solid var(--navy); }
 .nav-link.policy { background: var(--amber-50); }
 .policy-banner { border: 2px solid var(--navy); box-shadow: 5px 5px 0 var(--pink); }
 .policy-banner .badge { border: 2px solid #fff; }
 .region { border: 2px solid var(--navy); }
 .chip { background: var(--teal-50); color: var(--teal-600); }
-.page-head { background: linear-gradient(180deg, #efe6fb, var(--bg)); border-bottom: 2px solid var(--navy); }
+.page-head { background: linear-gradient(180deg, #fde6ef, var(--bg)); border-bottom: 2px solid var(--navy); }
 .site-footer { border-top: 2px solid var(--navy); }
