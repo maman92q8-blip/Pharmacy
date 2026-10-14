@@ -1,6 +1,7 @@
 ---
 import { site } from '../data/site';
 import Icon from '../components/Icon.astro';
+import Hawan from '../components/Hawan.astro';
 import '../styles/global.css';
 
 interface Props { title?: string; description?: string; image?: string }
@@ -30,18 +31,18 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
   <meta property="og:title" content={fullTitle} />
   <meta property="og:description" content={description} />
   {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
-  <meta name="theme-color" content="#0b3a46" />
+  <meta name="theme-color" content="#1e2a4a" />
   <link rel="icon" href="/images/2022-05-FavIcon-1.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
   <a class="skip" href="#main">تخطَّ إلى المحتوى</a>
   <header class="site-header">
     <div class="wrap header-row">
       <a href="/" class="brand" aria-label={site.name}>
-        <span class="brand-mark" aria-hidden="true">℞</span>
+        <span class="brand-mark" aria-hidden="true"><Hawan size={40} animate={false} /></span>
         <span class="brand-text"><b>RX</b>periences</span>
       </a>
       <nav class="main-nav" aria-label="القائمة الرئيسية">
@@ -71,7 +72,7 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
   <footer class="site-footer">
     <div class="wrap footer-grid">
       <div>
-        <a href="/" class="brand light"><span class="brand-mark" aria-hidden="true">℞</span><span class="brand-text"><b>RX</b>periences</span></a>
+        <a href="/" class="brand light"><span class="brand-mark" aria-hidden="true"><Hawan size={40} animate={false} /></span><span class="brand-text"><b>RX</b>periences</span></a>
         <p>{site.description}</p>
       </div>
       <div>

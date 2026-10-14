@@ -2,21 +2,29 @@
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import Icon from '../components/Icon.astro';
+import Hawan from '../components/Hawan.astro';
 import { site, categories } from '../data/site';
 import { getPosts } from '../data/posts';
 const posts = (await getPosts()).slice(0, 6);
 const regions = ['uk-ireland', 'usa-canada', 'arab-countries'];
 ---
 <Base>
-  <section class="hero" style="background-image:url('/images/2022-05-pharma.jpg')">
+  <section class="hero">
     <div class="wrap">
-      <h1>{site.tagline}</h1>
-      <p class="en">{site.taglineEn}</p>
-      <p class="lead">تجارب حقيقية لصيادلة وطلبة صيدلة في الكويت وحول العالم، لتساعدك تختار تخصصك وجامعتك وطريقك المهني.</p>
-      <div class="btns">
-        <a href="/blog" class="btn btn-primary"><Icon name="book" /> اقرأ المقالات</a>
-        <a href="/experiences" class="btn btn-ghost"><Icon name="globe" /> تجارب واقعية</a>
+      <div>
+        <span class="hello">💬 أهلاً، أنا هاون!</span>
+        <h1>كل ما يتعلق بـ<mark>الصيدلة</mark></h1>
+        <p class="en">{site.taglineEn}</p>
+        <p class="lead">تجارب حقيقية لصيادلة وطلبة صيدلة في الكويت وحول العالم، ومراجع وأبحاث خليجية، لتساعدك تختار تخصصك وطريقك المهني.</p>
+        <div class="btns">
+          <a href="/blog" class="btn btn-primary"><Icon name="book" /> اقرأ المقالات</a>
+          <a href="/library" class="btn btn-ghost"><Icon name="library" /> مكتبة الصيادلة</a>
+        </div>
       </div>
+      <div class="hero-art"><Hawan size={240} /></div>
+      <svg class="pill" aria-hidden="true" width="80" height="38" viewBox="0 0 84 40" style="top:28px;left:44%;--r:-20deg"><rect x="2" y="2" width="80" height="36" rx="18" fill="#F7C948" stroke="#1E2A4A" stroke-width="2.5"/><path d="M42 2v36" stroke="#1E2A4A" stroke-width="2.5"/></svg>
+      <svg class="pill" aria-hidden="true" width="44" height="44" viewBox="0 0 48 48" style="bottom:18px;left:40%"><circle cx="24" cy="24" r="21" fill="#8E9BC0" stroke="#1E2A4A" stroke-width="2.5"/><path d="M11 24h26" stroke="#1E2A4A" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <svg class="pill" aria-hidden="true" width="72" height="34" viewBox="0 0 76 36" style="bottom:30px;left:16px;--r:25deg"><rect x="2" y="2" width="72" height="32" rx="16" fill="#F48FB1" stroke="#1E2A4A" stroke-width="2.5"/><path d="M38 2v32" stroke="#1E2A4A" stroke-width="2.5"/></svg>
     </div>
   </section>
 
