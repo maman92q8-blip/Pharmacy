@@ -12,6 +12,7 @@ const nav = [
   { href: '/', label: 'الرئيسية', icon: 'home' },
   { href: '/blog', label: 'المدونة', icon: 'book' },
   { href: '/experiences', label: 'تجارب واقعية', icon: 'globe' },
+  { href: '/resources', label: 'المراجع', icon: 'library' },
   { href: '/policies', label: 'سياسات وزارة الصحة', icon: 'shield' },
   { href: '/consultations', label: 'الاستشارات', icon: 'chat' },
   { href: '/about', label: 'من أنا', icon: 'user' },
@@ -58,7 +59,7 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
 
   <!-- Bottom bar on phones: one tap to every section -->
   <nav class="tabbar" aria-label="تنقل سريع">
-    {nav.slice(0, 5).map((n) => (
+    {nav.filter((n) => n.icon !== 'globe' && n.icon !== 'user').map((n) => (
       <a href={n.href} class:list={{ active: active(n.href) }}>
         <Icon name={n.icon} />
         <span>{n.label === 'سياسات وزارة الصحة' ? 'السياسات' : n.label}</span>

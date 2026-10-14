@@ -1,5 +1,5 @@
 import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { glob, file } from 'astro/loaders';
 
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/posts' }),
@@ -29,4 +29,15 @@ const policies = defineCollection({
   }),
 });
 
-export const collections = { posts, policies };
+const resources = defineCollection({
+  loader: file('src/data/resources.yaml'),
+  schema: z.object({
+    section: z.enum(['courses', 'youtube', 'references', 'apps']),
+    name: z.string(),
+    desc: z.string().optional(),
+    url: z.string().url(),
+    free: z.boolean().default(true),
+  }),
+});
+
+export const collections = { posts, policies, resources };

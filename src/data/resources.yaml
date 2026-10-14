@@ -1,0 +1,139 @@
+# ✏️ Add a resource: copy any block below, change the details, and commit.
+# section: courses | youtube | references | apps
+# free: true / false
+
+- id: openwho-amr
+  section: courses
+  name: "OpenWHO – Antimicrobial Stewardship"
+  desc: "دورة مجانية من منظمة الصحة العالمية عن الاستخدام الرشيد للمضادات الحيوية (حوالي 8 ساعات) مع شهادة مشاركة."
+  url: "https://openwho.org/courses/AMR-competency"
+  free: true
+- id: openwho
+  section: courses
+  name: "OpenWHO – كل الدورات"
+  desc: "منصة منظمة الصحة العالمية للتعليم المجاني، فيها دورات عن الأمراض المعدية والطوارئ الصحية والصحة العامة."
+  url: "https://openwho.org/"
+  free: true
+- id: coursera
+  section: courses
+  name: "Coursera"
+  desc: "دورات من جامعات عالمية في الفارماكولوجي وتطوير الأدوية. بعض الدورات يمكن مشاهدتها مجاناً، والشهادة غالباً مدفوعة."
+  url: "https://www.coursera.org/search?query=pharmacology"
+  free: false
+- id: futurelearn
+  section: courses
+  name: "FutureLearn"
+  desc: "دورات قصيرة من جامعات بريطانية، منها دورات عن المضادات الحيوية والصحة العامة."
+  url: "https://www.futurelearn.com/search?q=pharmacy"
+  free: false
+- id: khan
+  section: courses
+  name: "Khan Academy – Health & Medicine"
+  desc: "شروحات مجانية مبسطة للفسيولوجي والأمراض، ممتازة لتأسيس طالب الصيدلة."
+  url: "https://www.khanacademy.org/science/health-and-medicine"
+  free: true
+
+- id: yt-speed-pharm
+  section: youtube
+  name: "Speed Pharmacology"
+  desc: "شرح المجموعات الدوائية وطريقة عملها وأعراضها الجانبية وموانع الاستعمال بأسلوب سريع ومركّز."
+  url: "https://www.youtube.com/results?search_query=Speed+Pharmacology"
+  free: true
+- id: yt-ninja-nerd
+  section: youtube
+  name: "Ninja Nerd"
+  desc: "محاضرات مفصلة بالسبورة في الفسيولوجي والفارماكولوجي، مناسبة للفهم العميق."
+  url: "https://www.youtube.com/results?search_query=Ninja+Nerd+pharmacology"
+  free: true
+- id: yt-armando
+  section: youtube
+  name: "Armando Hasudungan"
+  desc: "رسومات توضيحية جميلة وشرح قصير للفارماكولوجي والفسيولوجي."
+  url: "https://www.youtube.com/results?search_query=Armando+Hasudungan+pharmacology"
+  free: true
+- id: yt-osmosis
+  section: youtube
+  name: "Osmosis"
+  desc: "فيديوهات قصيرة ومرتبة لكل مجموعة دوائية ومرض، ممتازة للمراجعة قبل الامتحان."
+  url: "https://www.youtube.com/results?search_query=Osmosis+pharmacology"
+  free: true
+- id: yt-mattmike
+  section: youtube
+  name: "Dr Matt & Dr Mike"
+  desc: "شروحات مختصرة وعالية الفائدة في الفارماكولوجي والفسيولوجي."
+  url: "https://www.youtube.com/results?search_query=Dr+Matt+and+Dr+Mike+pharmacology"
+  free: true
+- id: yt-medcram
+  section: youtube
+  name: "MedCram"
+  desc: "تبسيط المواضيع الإكلينيكية مثل تخطيط القلب والأملاح، مربوطة بحالات مرضية."
+  url: "https://www.youtube.com/results?search_query=MedCram"
+  free: true
+- id: yt-moudhi
+  section: youtube
+  name: "قناة موضي أمان"
+  desc: "قناتنا على اليوتيوب: تجارب ونصائح عن دراسة الصيدلة والابتعاث."
+  url: "https://youtu.be/b53vCeUeXEE"
+  free: true
+
+- id: lactmed
+  section: references
+  name: "LactMed"
+  desc: "قاعدة بيانات المكتبة الوطنية الأمريكية للطب عن الأدوية والرضاعة، مع المراجع العلمية."
+  url: "https://www.ncbi.nlm.nih.gov/books/?term=LactMed"
+  free: true
+- id: elactancia
+  section: references
+  name: "e-lactancia"
+  desc: "اكتب اسم الدواء واعرف مدى توافقه مع الرضاعة بتصنيف بالألوان."
+  url: "https://e-lactancia.org/"
+  free: true
+- id: mothertobaby
+  section: references
+  name: "MotherToBaby"
+  desc: "نشرات مجانية عن الأدوية والتعرض لها أثناء الحمل والرضاعة."
+  url: "https://mothertobaby.org/"
+  free: true
+- id: bnf
+  section: references
+  name: "BNF – NICE"
+  desc: "المرجع البريطاني الرسمي للأدوية والجرعات."
+  url: "https://bnf.nice.org.uk/"
+  free: true
+- id: dailymed
+  section: references
+  name: "DailyMed"
+  desc: "النشرات الرسمية للأدوية المعتمدة في أمريكا (Package inserts)."
+  url: "https://dailymed.nlm.nih.gov/"
+  free: true
+- id: pubmed
+  section: references
+  name: "PubMed"
+  desc: "محرك البحث الأساسي للأبحاث الطبية والصيدلانية."
+  url: "https://pubmed.ncbi.nlm.nih.gov/"
+  free: true
+
+- id: app-medscape
+  section: apps
+  name: "Medscape"
+  desc: "مرجع أدوية وفاحص تداخلات وحاسبات طبية. مجاني مع حساب."
+  url: "https://www.medscape.com/"
+  free: true
+- id: app-epocrates
+  section: apps
+  name: "Epocrates"
+  desc: "معلومات الدواء، فاحص التداخلات، والتعرف على الحبوب. مجاني، والإضافات باشتراك."
+  url: "https://discover.epocrates.com/"
+  free: true
+- id: app-lexidrug
+  section: apps
+  name: "UpToDate Lexidrug (Lexicomp)"
+  desc: "مرجع إكلينيكي مفصل للجرعات والتداخلات والحمل والرضاعة. باشتراك، وغالباً متاح عن طريق الجامعة أو المستشفى."
+  url: "https://wolterskluwer.com/en/solutions/uptodate/resources/lexidrug-user-academy"
+  free: false
+- id: app-lactrx
+  section: apps
+  name: "LactRx"
+  desc: "تطبيق مجاني من MotherToBaby عن الأدوية واللقاحات أثناء الرضاعة، مبني على LactMed."
+  url: "https://mothertobaby.org/lactrx/"
+  free: true
