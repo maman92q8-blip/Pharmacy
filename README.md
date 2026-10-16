@@ -55,3 +55,11 @@ Capsy (the pink capsule in the corner) answers visitors' questions using **only 
 - **To turn on the AI answers**: create an API key at console.anthropic.com, then in Vercel open the project → **Settings → Environment Variables** and add `ANTHROPIC_API_KEY` with the key. Redeploy. Set a monthly spending limit in the Anthropic console.
 - Optional: `CAPSY_MODEL` to choose another Claude model (default `claude-haiku-5-5`).
 - New articles, studies and decisions are picked up automatically on the next deploy.
+
+## 📝 Get an experience from a student
+
+1. Send the student this link: **/share-experience** (for example `https://rxperiences.vercel.app/share-experience`).
+2. They answer the questions and press **جهّز تجربتي**, then copy the text (or download the file) and send it back to you, with any photos.
+3. On GitHub open **`src/content/posts`** → **Add file → Create new file**, name it in English (e.g. `manchester-mpharm.md`) and paste the text exactly as you received it.
+4. Optional: upload a photo to `public/images` and replace the line `# image: ...` with `image: "/images/your-photo.jpg"`.
+5. Commit. The experience appears on the site in about a minute, under **تجارب واقعية** and its country.

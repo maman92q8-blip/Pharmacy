@@ -6,8 +6,8 @@ import MascotDock from '../components/MascotDock.astro';
 import Capsy from '../components/Capsy.astro';
 import '../styles/global.css';
 
-interface Props { title?: string; description?: string; image?: string }
-const { title, description = site.description, image } = Astro.props;
+interface Props { title?: string; description?: string; image?: string; mascots?: boolean }
+const { title, description = site.description, image, mascots = true } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} – ${site.tagline}`;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
@@ -87,8 +87,8 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/') 
 
   <main id="main"><slot /></main>
 
-  <MascotDock path={path} />
-  <Capsy />
+  {mascots && <MascotDock path={path} />}
+  {mascots && <Capsy />}
 
   <footer class="site-footer">
     <div class="wrap footer-grid">

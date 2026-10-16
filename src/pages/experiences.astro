@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PostList from '../components/PostList.astro';
+import Icon from '../components/Icon.astro';
 import { categories } from '../data/site';
 import { getPosts, articlesLabel } from '../data/posts';
 const all = await getPosts();
@@ -22,6 +23,11 @@ const regions = ['uk-ireland', 'usa-canada', 'arab-countries'].map((slug) => ({
         ))}
       </nav>
       <PostList posts={posts} experienceFilter={false} />
+      <a class="feature-link share-cta" href="/share-experience">
+        <span class="badge"><Icon name="chat" size={26} /></span>
+        <span><strong>درست صيدلة؟ شارك تجربتك</strong><span>جاوب على أسئلة بسيطة، وتنشر تجربتك هنا لتفيد غيرك.</span></span>
+        <Icon name="arrow" size={22} />
+      </a>
     </div>
   </section>
 </Base>
