@@ -713,3 +713,10 @@ fieldset .fs-note:last-child { margin: 14px 0 0; }
 .preview-body p { margin: 0 0 .6em; white-space: pre-line; }
 .share-done .link-more { border: 0; background: none; padding: 0; }
 .share-cta { margin: 56px 0 0; }
+.hp { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.share-form input[type=file] { padding: 10px; background: var(--paper); border: 1.5px dashed #cfc8bd; border-radius: var(--r-md); width: 100%; font-size: 15px; }
+.thumbs { display: flex; gap: 8px; flex-wrap: wrap; }
+.thumbs img { width: 84px; height: 84px; object-fit: cover; border-radius: 12px; border: 1.5px solid var(--line); }
+.thumbs:empty { display: none; }
+.sent-art { width: 120px; margin-bottom: 8px; }
+.share-form > .btn[disabled] { opacity: .7; cursor: progress; transform: none; }

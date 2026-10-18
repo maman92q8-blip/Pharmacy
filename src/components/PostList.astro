@@ -58,5 +58,10 @@ const used = Object.keys(categories).filter((c) => posts.some((p) => p.data.cate
   }));
   const q = new URLSearchParams(location.search).get('q');
   if (q) { input.value = q; apply(); }
-  if (location.hash === '#search' || q) input.focus({ preventScroll: !!q });
+  // focus after the page has finished loading: the browser's own jump to #search would otherwise undo it
+  const focusSearch = () => input.focus({ preventScroll: !!q });
+  if (location.hash === '#search' || q) {
+    if (document.readyState === 'complete') setTimeout(focusSearch, 0);
+    else addEventListener('load', () => setTimeout(focusSearch, 0), { once: true });
+  }
 </script>

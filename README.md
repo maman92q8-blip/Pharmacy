@@ -58,8 +58,19 @@ Capsy (the pink capsule in the corner) answers visitors' questions using **only 
 
 ## 📝 Get an experience from a student
 
-1. Send the student this link: **/share-experience** (for example `https://rxperiences.vercel.app/share-experience`).
-2. They answer the questions and press **جهّز تجربتي**, then copy the text (or download the file) and send it back to you, with any photos.
-3. On GitHub open **`src/content/posts`** → **Add file → Create new file**, name it in English (e.g. `manchester-mpharm.md`) and paste the text exactly as you received it.
-4. Optional: upload a photo to `public/images` and replace the line `# image: ...` with `image: "/images/your-photo.jpg"`.
-5. Commit. The experience appears on the site in about a minute, under **تجارب واقعية** and its country.
+**How it works:** you send the student the link **/share-experience**. They answer the questions, add up to 3 photos and press **أرسل تجربتي**. You get an email from GitHub, and nothing is published until you approve it.
+
+**To approve or reject (from the GitHub email, the GitHub app, or github.com → Pull requests):**
+1. Open the pull request named **«تجربة جديدة: …»**.
+2. Wait for Vercel's comment with a **Preview** link and open it to see the article exactly as it will look on the site.
+3. Want to fix something? **Files changed** → ⋯ next to the file → **Edit file**.
+4. **Publish:** press **Merge pull request** → **Confirm merge**. It's live in about a minute.
+5. **Reject:** press **Close pull request**.
+
+**One-time setup** (until this is done, students get a "copy / download and send it yourself" screen instead):
+1. github.com → your photo → **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
+2. Repository access: **Only select repositories → Pharmacy**. Permissions: **Contents: Read and write** and **Pull requests: Read and write**. Generate and copy the token.
+3. Vercel → project **rxperiences** → **Settings → Environment Variables** → add `GITHUB_TOKEN` = the token → Save → **Redeploy**.
+4. Make sure GitHub emails you about new pull requests: on the repository page press **Watch → All Activity**.
+
+Note: the repository is public, so a submitted experience can be seen on GitHub before you approve it. To keep submissions private, make the repository private (repository Settings → Danger zone → Change visibility); Vercel keeps working.

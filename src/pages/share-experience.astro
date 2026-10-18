@@ -1,34 +1,14 @@
 ---
-// "شارك تجربتك": a questionnaire Moudhi sends to students. Their answers become a ready-to-publish
-// article (same format as src/content/posts/*.md) that they send back to her.
+// "شارك تجربتك": a questionnaire Moudhi sends to students. Pressing "أرسل تجربتي" sends it to /api/experience,
+// which opens it on GitHub for Moudhi to approve (Merge) or reject (Close). If that isn't set up yet,
+// the page falls back to letting the student copy or download the article and send it themselves.
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import Hawan from '../components/Hawan.astro';
 import { site } from '../data/site';
+import { COUNTRIES, STAGES, QUESTIONS } from '../lib/experience-article';
 
-const countries = [
-  { v: 'بريطانيا', cat: 'uk-ireland' }, { v: 'إيرلندا', cat: 'uk-ireland' },
-  { v: 'أمريكا', cat: 'usa-canada' }, { v: 'كندا', cat: 'usa-canada' },
-  { v: 'الكويت', cat: 'arab-countries' }, { v: 'الأردن', cat: 'arab-countries' },
-  { v: 'مصر', cat: 'arab-countries' }, { v: 'السعودية', cat: 'arab-countries' },
-  { v: 'دولة عربية أخرى', cat: 'arab-countries' }, { v: 'دولة أخرى', cat: '' },
-];
-const stages = ['فاونديشن (Foundation)', 'بكالوريوس صيدلة (BPharm / MPharm)', 'فارم دي (PharmD)', 'ماجستير (MSc)', 'دكتوراه (PhD)', 'بورد أو شهادة مهنية', 'أخرى'];
-
-// The questions, taken from the experiences already on the site. Each becomes a heading in the article.
-const questions = [
-  { id: 'q-program', q: 'ما هو البرنامج وكم مدته؟', hint: 'نوع البرنامج، عدد السنوات، هل فيه سنة تحضيرية أو تدريب.' },
-  { id: 'q-subjects', q: 'ما هي المواد وطبيعة المنهج؟', hint: 'أهم المواد، وهل فيه جانب عملي أو تدريب في مستشفى أو صيدلية.' },
-  { id: 'q-admission', q: 'ما هي متطلبات القبول وكيف قدّمت؟', hint: 'المعدل، IELTS أو TOEFL، اختبارات، مقابلة، وكم أخذ التقديم من وقت.' },
-  { id: 'q-exams', q: 'كيف طريقة التقييم والامتحانات؟', hint: 'امتحانات، assignments، OSCE، مشروع بحث…' },
-  { id: 'q-difficulty', q: 'ما مستوى صعوبة الدراسة؟', hint: 'وكيف تقارنها بالدراسة في الكويت أو المدرسة.' },
-  { id: 'q-city', q: 'كيف المنطقة والمعيشة؟', hint: 'الأمان، المواصلات، الجو، المطاعم والجالية العربية.' },
-  { id: 'q-housing', q: 'وين سكنت وكم تكلفة المعيشة تقريباً؟', hint: 'سكن جامعي أو خاص، والإيجار الشهري التقريبي.' },
-  { id: 'q-after', q: 'شنو بعد التخرج؟', hint: 'الاعتراف بالشهادة في الكويت أو الخليج، فرص العمل والتدريب.' },
-  { id: 'q-best', q: 'أحلى شي وأصعب شي في التجربة؟', hint: '' },
-  { id: 'q-advice', q: 'نصيحتك لطالب يفكر بنفس الطريق؟', hint: '' },
-];
-const contact = (site as any).submit ?? {};
+const countries = COUNTRIES, stages = STAGES, questions = QUESTIONS;
 ---
 <Base mascots={false} title="شارك تجربتك" description="شارك تجربتك في دراسة الصيدلة لتُنشر في RXperiences وتفيد طلاب الكويت والخليج.">
   <div class="page-head">
@@ -100,37 +80,47 @@ const contact = (site as any).submit ?? {};
             <div class="field">
               <label for={q.id}>{q.q}</label>
               {q.hint && <p class="hint" id={`${q.id}-hint`}>{q.hint}</p>}
-              <textarea id={q.id} name={q.id} rows="4" dir="auto" data-q={q.q} aria-describedby={q.hint ? `${q.id}-hint` : undefined}></textarea>
+              <textarea id={q.id} name={q.id} rows="4" dir="auto" data-q={q.id} aria-describedby={q.hint ? `${q.id}-hint` : undefined}></textarea>
             </div>
           ))}
         </fieldset>
 
         <fieldset>
-          <legend><span class="step">3</span> الموافقة</legend>
+          <legend><span class="step">3</span> الصور والموافقة</legend>
+          <div class="field">
+            <label for="f-photos">صور للجامعة أو المدينة <span class="opt">(اختياري، إلى ٣ صور)</span></label>
+            <input id="f-photos" type="file" accept="image/jpeg,image/png,image/webp,image/heic" multiple data-photos />
+            <div class="thumbs" data-thumbs></div>
+            <p class="hint">صور التقطتها بنفسك فقط، وبدون وجوه أشخاص ما وافقوا.</p>
+          </div>
           <label class="check">
             <input type="checkbox" name="consent" required />
             أوافق على نشر تجربتي في RXperiences، وأعرف إن موضي ممكن تعدّل الصياغة بشكل بسيط.
           </label>
-          <p class="fs-note">عندك صور للجامعة أو المدينة؟ أرسلها لموضي مع الرسالة، وتنحط مع المقال.</p>
         </fieldset>
 
+        <div class="hp" aria-hidden="true"><label>لا تعبّي هذا الحقل <input name="website" tabindex="-1" autocomplete="off" /></label></div>
         <p class="form-error" data-error role="alert" hidden></p>
-        <button type="submit" class="btn btn-primary">جهّز تجربتي <Icon name="arrow" size={18} /></button>
-        <p class="fs-note">إجاباتك تنحفظ في جهازك لو طلعت ورجعت، وما تنرسل لأي مكان إلا لما ترسلها أنت.</p>
+        <button type="submit" class="btn btn-primary" data-send>أرسل تجربتي <Icon name="arrow" size={18} /></button>
+        <p class="fs-note">إجاباتك تنحفظ في جهازك لو طلعت ورجعت. توصل لموضي بس لما تضغط «أرسل تجربتي»، وما تنشر إلا بعد ما تراجعها.</p>
       </form>
+
+      <section class="share-done" data-sent hidden aria-labelledby="sent-title" tabindex="-1">
+        <div class="sent-art" aria-hidden="true"><Hawan size={120} animate={false} decorative /></div>
+        <h2 id="sent-title">وصلت تجربتك لموضي!</h2>
+        <p>شكراً لأنك شاركت. موضي بتراجعها، وأول ما تنشرها بتلقاها في <a href="/experiences">تجارب واقعية</a>.</p>
+      </section>
 
       <section class="share-done" data-done hidden aria-labelledby="done-title" tabindex="-1">
         <h2 id="done-title">تجربتك جاهزة!</h2>
-        <p>آخر خطوة: أرسلها لموضي في نفس المحادثة اللي وصلك منها الرابط.</p>
+        <p data-done-why>ما قدرنا نرسلها تلقائياً الحين. انسخها أو حمّلها وأرسلها لموضي في نفس المحادثة اللي وصلك منها الرابط.</p>
         <div class="btns">
           <button type="button" class="btn btn-primary" data-copy><Icon name="doc" /> انسخ التجربة</button>
           <button type="button" class="btn btn-quiet" data-share hidden><Icon name="chat" /> أرسل عن طريق…</button>
-          {contact.whatsapp && <a class="btn btn-quiet" data-wa href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener">واتساب</a>}
-          {contact.email && <a class="btn btn-quiet" data-mail href={`mailto:${contact.email}`}>إيميل</a>}
           <button type="button" class="btn btn-quiet" data-download>تحميل كملف</button>
         </div>
         <p class="copied" data-copied role="status" aria-live="polite"></p>
-        <p class="fs-note">ما تعرف وين ترسلها؟ راسل موضي على <a href={site.social.instagram} target="_blank" rel="noopener">إنستغرام</a>. إذا كانت الرسالة طويلة، أرسل الملف.</p>
+        <p class="fs-note">ما تعرف وين ترسلها؟ راسل موضي على <a href={site.social.instagram} target="_blank" rel="noopener">إنستغرام</a>، وأرسل الصور معها.</p>
         <details class="preview">
           <summary>شوف شكل المقال <Icon name="chevron" size={18} /></summary>
           <div class="preview-body" data-preview></div>
@@ -142,16 +132,22 @@ const contact = (site as any).submit ?? {};
 </Base>
 
 <script>
+  import { buildArticle, slugFor, validate, QUESTIONS, MIN_ANSWERS, type Submission } from '../lib/experience-article';
   const form = document.querySelector<HTMLFormElement>('[data-share-form]')!;
   const done = document.querySelector<HTMLElement>('[data-done]')!;
+  const sent = document.querySelector<HTMLElement>('[data-sent]')!;
   const errorBox = document.querySelector<HTMLElement>('[data-error]')!;
+  const sendBtn = form.querySelector<HTMLButtonElement>('[data-send]')!;
   const anon = form.querySelector<HTMLInputElement>('[data-anon]')!;
   const nameInput = form.querySelector<HTMLInputElement>('#f-name')!;
+  const photoInput = form.querySelector<HTMLInputElement>('[data-photos]')!;
+  const thumbs = form.querySelector<HTMLElement>('[data-thumbs]')!;
   const KEY = 'rx-share-draft';
   let article = '', fileName = '';
+  let photos: string[] = [];
 
-  // ----- keep a draft on this device -----
-  const fields = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('input, textarea, select')];
+  // ----- keep a draft on this device (not the photos) -----
+  const fields = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('input:not([type=file]), textarea, select')];
   try {
     const saved = JSON.parse(localStorage.getItem(KEY) || '{}');
     for (const f of fields) if (f.name in saved) {
@@ -167,86 +163,97 @@ const contact = (site as any).submit ?? {};
   const syncAnon = () => { nameInput.required = !anon.checked; nameInput.disabled = anon.checked; };
   anon.addEventListener('change', syncAnon); syncAnon();
 
-  // ----- build the article in the site's format -----
-  const val = (n: string) => (form.elements.namedItem(n) as HTMLInputElement | null)?.value.trim() ?? '';
-  const yaml = (s: string) => s.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\s+/g, ' ');
-  function build() {
-    const country = form.querySelector<HTMLSelectElement>('#f-country')!;
-    const cat = country.selectedOptions[0]?.dataset.cat || '';
-    const stage = val('stage').replace(/\s*\(.*\)\s*/, '');
-    const uni = val('university'), city = val('city'), major = val('major');
-    const answers = [...form.querySelectorAll<HTMLTextAreaElement>('textarea[data-q]')]
-      .map((t) => ({ q: t.dataset.q!, a: t.value.trim() })).filter((x) => x.a);
-    const title = `تجربة ${stage}${major ? ` ${major}` : ''} في ${uni}`;
-    const excerpt = answers[0]?.a.slice(0, 160) ?? '';
-    const date = new Date().toISOString().slice(0, 10);
-    const who = anon.checked ? `طالب/ة من ${val('country')}` : val('name');
-    const facts = [
-      `**الجامعة:** ${uni}`,
-      city && `**المدينة:** ${city}`,
-      `**الدولة:** ${val('country')}`,
-      `**المرحلة:** ${val('stage')}${major ? ` – ${major}` : ''}`,
-      val('years') && `**سنوات الدراسة:** ${val('years')}`,
-      val('sponsor') && `**جهة الابتعاث:** ${val('sponsor')}`,
-    ].filter(Boolean).join('  \n');
-    // each line the student wrote becomes its own paragraph
-    const body = answers.map((x) => `## ${x.q}\n\n${x.a.replace(/\r/g, '').split(/\n+/).map((l) => l.trim()).filter(Boolean).join('\n\n')}`).join('\n\n');
-    article = `---
-title: "${yaml(title)}"
-date: ${date}
-categories: [${cat ? `"${cat}"` : ''}]
-experience: true
-# image: "/images/اسم-الصورة.jpg"
-excerpt: "${yaml(excerpt)}"
----
-
-${facts}
-
-${body}
-
-**تجربة: ${who}**
-`;
-    const slugBase = (uni.match(/[A-Za-z]+/g) || ['experience']).slice(0, 3).join('-').toLowerCase();
-    fileName = `${slugBase}-${date}.md`;
-    return answers.length;
+  // ----- photos: shrink on the phone before sending (max 1600px, JPEG) -----
+  async function shrink(file: File): Promise<string> {
+    const bmp = await createImageBitmap(file);
+    const scale = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement('canvas');
+    c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
+    c.getContext('2d')!.drawImage(bmp, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', 0.82);
   }
+  photoInput.addEventListener('change', async () => {
+    const files = [...(photoInput.files ?? [])].slice(0, 3);
+    photos = []; thumbs.replaceChildren();
+    for (const f of files) {
+      try {
+        const url = await shrink(f); photos.push(url);
+        const img = document.createElement('img'); img.src = url; img.alt = ''; thumbs.append(img);
+      } catch { errorBox.textContent = `ما قدرنا نقرأ الصورة «${f.name}». جرّب صورة JPG أو PNG.`; errorBox.hidden = false; }
+    }
+    if ((photoInput.files?.length ?? 0) > 3) { errorBox.textContent = 'أخذنا أول ٣ صور فقط.'; errorBox.hidden = false; }
+  });
+
+  // ----- read the form -----
+  const val = (n: string) => (form.elements.namedItem(n) as HTMLInputElement | null)?.value.trim() ?? '';
+  function read() {
+    const answers: Record<string, string> = {};
+    for (const q of QUESTIONS) { const v = val(q.id); if (v) answers[q.id] = v; }
+    return {
+      name: val('name'), anon: anon.checked, country: val('country'), city: val('city'), university: val('university'),
+      stage: val('stage'), major: val('major'), years: val('years'), sponsor: val('sponsor'), answers,
+      consent: form.querySelector<HTMLInputElement>('input[name=consent]')!.checked,
+    };
+  }
+  function showError(msg: string, el?: HTMLElement | null) { errorBox.textContent = msg; errorBox.hidden = false; (el ?? errorBox).focus?.(); }
 
   function preview() {
     const box = document.querySelector<HTMLElement>('[data-preview]')!;
     box.replaceChildren();
-    const body = article.split('---').slice(2).join('---');
-    for (const block of body.split(/\n\n+/)) {
-      const t = block.trim(); if (!t) continue;
+    for (const block of article.split('---').slice(2).join('---').split(/\n\n+/)) {
+      const t = block.trim(); if (!t || t.startsWith('![')) continue;
       const el = document.createElement(t.startsWith('## ') ? 'h3' : 'p');
-      el.textContent = t.replace(/^## /, '').replace(/\*\*/g, '');
-      el.setAttribute('dir', 'auto');
-      box.append(el);
+      el.textContent = t.replace(/^## /, '').replace(/\*\*/g, ''); el.setAttribute('dir', 'auto'); box.append(el);
     }
   }
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    errorBox.hidden = true;
-    const missing = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[required]')].find((f) =>
-      f instanceof HTMLInputElement && f.type === 'checkbox' ? !f.checked : !f.value.trim());
-    if (missing) {
-      const label = missing.type === 'checkbox' ? 'وافق على النشر في الخطوة ٣' : `عبّي: ${form.querySelector(`label[for="${missing.id}"]`)?.textContent?.replace(/\(.*\)/, '').trim()}`;
-      errorBox.textContent = `باقي شي: ${label}.`; errorBox.hidden = false; missing.focus(); return;
-    }
-    const n = build();
-    if (n < 3) {
-      errorBox.textContent = `جاوبت على ${n} من الأسئلة. جاوب على ٣ أسئلة على الأقل في خطوة «تجربتك».`;
-      errorBox.hidden = false;
-      [...form.querySelectorAll<HTMLTextAreaElement>('textarea[data-q]')].find((t) => !t.value.trim())?.focus();
-      return;
-    }
+  function fallback(why?: string) {
+    if (why) document.querySelector<HTMLElement>('[data-done-why]')!.textContent = why;
     preview();
-    const wa = document.querySelector<HTMLAnchorElement>('[data-wa]');
-    if (wa) wa.href = `${wa.href.split('?')[0]}?text=${encodeURIComponent(article)}`;
-    const mail = document.querySelector<HTMLAnchorElement>('[data-mail]');
-    if (mail) mail.href = `${mail.href.split('?')[0]}?subject=${encodeURIComponent('تجربة جديدة لـ RXperiences')}&body=${encodeURIComponent(article)}`;
     form.hidden = true; done.hidden = false; done.focus();
     window.scrollTo({ top: done.getBoundingClientRect().top + scrollY - 100 });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBox.hidden = true;
+    const data = read();
+    const v = validate(data);
+    if (!v.ok) {
+      // point at the field that needs attention
+      const target = !data.anon && !data.name ? nameInput
+        : !data.country ? form.querySelector<HTMLElement>('#f-country')
+        : !data.university ? form.querySelector<HTMLElement>('#f-uni')
+        : !data.stage ? form.querySelector<HTMLElement>('#f-stage')
+        : Object.keys(data.answers).length < MIN_ANSWERS ? [...form.querySelectorAll<HTMLTextAreaElement>('textarea[data-q]')].find((t) => !t.value.trim())
+        : form.querySelector<HTMLElement>('input[name=consent]');
+      showError(`باقي شي: ${v.error}`, target);
+      return;
+    }
+    const d: Submission = v.data;
+    article = buildArticle(d).markdown;
+    fileName = `${slugFor(d)}-${new Date().toISOString().slice(0, 10)}.md`;
+
+    sendBtn.disabled = true; sendBtn.firstChild!.textContent = 'جاري الإرسال… ';
+    try {
+      const res = await fetch('/api/experience', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ ...data, photos, website: val('website') }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (res.ok && out.ok) {
+        try { localStorage.removeItem(KEY); } catch {}
+        form.hidden = true; sent.hidden = false; sent.focus();
+        window.scrollTo({ top: sent.getBoundingClientRect().top + scrollY - 100 });
+      } else if (res.status === 400 || res.status === 429) {
+        showError(out.error || 'صار خطأ، راجع الإجابات وجرّب مرة ثانية.');
+      } else {
+        fallback(); // not set up yet, or GitHub unavailable: let the student send it themselves
+      }
+    } catch {
+      fallback('ما قدرنا نتصل بالموقع الحين. انسخها أو حمّلها وأرسلها لموضي في نفس المحادثة اللي وصلك منها الرابط.');
+    } finally {
+      sendBtn.disabled = false; sendBtn.firstChild!.textContent = 'أرسل تجربتي ';
+    }
   });
 
   const status = document.querySelector<HTMLElement>('[data-copied]')!;
@@ -260,7 +267,7 @@ ${body}
     shareBtn.addEventListener('click', async () => {
       const file = new File([article], fileName, { type: 'text/plain' });
       try {
-        if (navigator.canShare?.({ files: [file] })) await navigator.share({ files: [file], title: 'تجربة لـ RXperiences', text: 'تجربتي لموقع RXperiences' });
+        if (navigator.canShare?.({ files: [file] })) await navigator.share({ files: [file], title: 'تجربة لـ RXperiences' });
         else await navigator.share({ title: 'تجربة لـ RXperiences', text: article });
       } catch {}
     });
