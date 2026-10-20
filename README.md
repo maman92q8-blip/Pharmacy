@@ -1,5 +1,12 @@
 # RXperiences – كل ما يتعلق بالصيدلة
 
+## The site's aim (keep this in mind for every change)
+
+- **Easy to reach:** simple pages, fast on a phone, clear menu.
+- **Easy to take away:** resources, studies and files should be easy to open and download.
+- **Mostly free:** almost everything is free. Paid items (quiz cards, sticker packs) are few, cheap and clearly optional.
+- **Rich, hard-to-find content:** pharmacy resources, Kuwait/GCC studies and MoH policies that are usually hard to locate, gathered in one place.
+
 The pharmacy blog of Moudhi Aman. Every change you save on GitHub goes live automatically on Vercel within about a minute.
 
 ## ✍️ Add a new article (from phone or computer)
